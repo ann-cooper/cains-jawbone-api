@@ -1,3 +1,5 @@
+# Cain's Jawbone API
+An API to track research about the Cain's Jawbone puzzle book.
 ## Dependency management pip-tools
 
 ### First steps
