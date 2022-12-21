@@ -1,0 +1,22 @@
+version: '3.1'
+
+services: 
+
+    api:
+        build:
+            context: .
+        container_name: puzzle_api
+        ports:
+            - "8000:8000"
+        volumes:
+            - ".:/code"
+        environment: 
+            APP_ENV: local
+            DB_PATH: ${DB_PATH}
+            SQLALCHEMY_DATABASE_URI: sqlite:////code/${DB_PATH}
+            FLASK_SECRET_KEY: "notsecret"
+
+
+networks: 
+    default:
+        name: puzzle-network
