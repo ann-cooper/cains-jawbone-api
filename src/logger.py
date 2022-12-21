@@ -47,12 +47,7 @@ def get_logger(name, level=logging.DEBUG, version=get_python_version()):
     logger.setLevel(level=level)
 
     log_handler = logging.StreamHandler()
-    if version >= 3.8:
-        formatter = CustomJsonFormatter(
-            "asctime;levelname;message;filename;lineno", validate=False
-        )
-    elif version == 3.7:
-        formatter = CustomJsonFormatter("asctime;levelname;message;filename;lineno")
+    formatter = CustomJsonFormatter("asctime;levelname;message;filename;lineno", validate=False)
     log_handler.setFormatter(formatter)
     logger.addHandler(log_handler)
     logger.propagate = False
