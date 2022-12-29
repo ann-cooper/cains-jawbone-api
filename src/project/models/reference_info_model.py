@@ -1,15 +1,13 @@
-from src.project.services import db
-from src.project.models.mongo_validation import mongo_dict_field_validator
+from src.project.services import mgdb
 
-class ReferenceInfo(db.Document):
+
+class ReferenceInfo(mgdb.Document):
     """Clue reference research info."""
 
-    _id = db.ObjectIdField(required=True)
-    page = db.IntField(required=True)
-    clue = db.StringField(required=True)
-    reference = db.DictField(
-        required=True, default={}, validation=mongo_dict_field_validator
-    )
-    created_date = db.ComplexDateTimeField(required=True)
+    _id = mgdb.ObjectIdField(required=True)
+    page = mgdb.IntField(required=True)
+    clue = mgdb.StringField(required=True)
+    reference = mgdb.DictField(required=True, default={})
+    created_date = mgdb.ComplexDateTimeField(required=True)
 
     meta = {"collection": "references"}

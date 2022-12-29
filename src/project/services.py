@@ -1,12 +1,12 @@
+from datetime import datetime
+
 from flask_alembic import Alembic
 from flask_marshmallow import Marshmallow
 from flask_mongoengine import MongoEngine
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
-
 
 # Create the mongo service
-db = MongoEngine()
+mgdb = MongoEngine()
 
 # Create postgres service
 pgdb = SQLAlchemy()
