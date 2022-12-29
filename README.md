@@ -34,3 +34,8 @@ pyenv activate my-env
 
 ## DB set-up
 - Locally export the DB_PATH for the sqlite file: `export DB_PATH=my_file.db`
+
+## Run the app
+`docker compose up`
+## Stop the app
+`docker compose down`
