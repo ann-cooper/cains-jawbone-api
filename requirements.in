@@ -8,6 +8,7 @@ flask
 flask-alembic
 flask-cors
 flask-marshmallow
+flask-migrate
 marshmallow-sqlalchemy
 flask-mongoengine
 flask-restful
