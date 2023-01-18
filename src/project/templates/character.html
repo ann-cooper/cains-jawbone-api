@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Characters</h1>
+    <form action="{{ url_for('characters') }}" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.page.label }}<br>
+            {{ form.page(size=32) }}<br>
+            {% for error in form.page.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.name.label }}<br>
+            {{ form.name(size=50) }}<br>
+            {% for error in form.name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.role.label }}<br>
+            {{ form.role(size=50) }}<br>
+            {% for error in form.role.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+    {% if results.message %} 
+    <div><p>{{ results.message }}</p></div>
+    {% else %}
+    {% for res in results %}
+    <div><p>{{ res }}</p></div>
+    {% endfor %}
+    {% endif %}
+{% endblock %}

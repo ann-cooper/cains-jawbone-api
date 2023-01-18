@@ -1,11 +1,10 @@
 from flask import Flask
 from flask_cors import CORS
-from flask_migrate import Migrate
 
 from src import logger
 from src.project.config.app_config import CONFIGURATIONS
-from src.project.resources import Characters, Hello
-from src.project.services import alembic, mgdb, mllw, pgdb
+from src.project.resources import Characters, Hello, RecordsCleanup
+from src.project.services import alembic, mgdb, mllw, db, migrate
 
 logger = logger.get_logger(__name__)
 
@@ -14,6 +13,7 @@ def register_endpoints(app):
 
     hello_view = Hello.as_view("hello")
     app.add_url_rule("/hello/", view_func=hello_view, methods=["GET"])
+    
     character_view = Characters.as_view("characters")
     app.add_url_rule(
         "/characters/",
@@ -30,18 +30,17 @@ def register_endpoints(app):
             "POST",
         ],
     )
-    app.add_url_rule(
-        "/characters/<int:character_id>",
-        view_func=character_view,
-        methods=["GET", "PUT", "DELETE"],
-    )
+    app.add_url_rule("/characters/search/<int:character_id>", view_func=character_view, methods=['GET'])
+
+    records_view = RecordsCleanup.as_view('records')
+    app.add_url_rule("/records-cleanup/", view_func=records_view, methods=['GET', 'POST'])
 
 
 def register_services(app, *services):
 
     for service in services:
         service.init_app(app)
-
+    migrate.init_app(app, db)
 
 def get_config(app_env, testing=False):
 
@@ -67,7 +66,6 @@ def create_app(app_env, testing=False):
     CORS(app)
 
     register_endpoints(app)
-    register_services(app, pgdb, mllw, alembic, mgdb)
+    register_services(app, db, mllw, alembic, mgdb)
 
-    migrate = Migrate(app, pgdb)
     return app

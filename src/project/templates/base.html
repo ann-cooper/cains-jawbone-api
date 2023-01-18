@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% if title %}
+        <title>{{ title }}</title>
+        {% else %}
+        <title>Cain's Jawbone</title>
+        {% endif %}
+    </head>
+    <body>
+        <div>New Character:
+            <a href="{{ url_for('characters') }}">Add or update characters</a>
+        </div>
+        <div>Delete record:
+            <a href="{{ url_for('records') }}">Delete records</a>
+        </div>
+        <hr>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </body>
+</html>

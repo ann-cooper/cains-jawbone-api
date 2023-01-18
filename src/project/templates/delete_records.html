@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Delete Character Record</h1>
+    <form action="{{ url_for('records') }}" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.name.label }}<br>
+            {{ form.name(size=50) }}<br>
+            {% for error in form.name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.page.label }}<br>
+            {{ form.page(size=50) }}<br>
+            {% for error in form.page.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.id.label }}<br>
+            {{ form.id(size=50) }}<br>
+            {% for error in form.id.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.record_type.label }}<br>
+            {{ form.record_type(size=10) }}<br>
+            {% for error in form.record_type.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+    {% if results.message %} 
+    <div><p>{{ results.message }}</p></div>
+    {% else %}
+    {% for res in results %}
+    <div><p>{{ res }}</p></div>
+    {% endfor %}
+    {% endif %}
+{% endblock %}

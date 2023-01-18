@@ -1,13 +1,23 @@
-from src.project.services import pgdb
+from src.project.services import db
 
 
-class People(pgdb.Model):
+class People(db.Model):
     """Characters mentioned and their role in the puzzle."""
 
     __tablename__ = "people"
 
-    id = pgdb.Column(pgdb.Integer, primary_key=True, autoincrement=True)
-    page = pgdb.Column(pgdb.Integer, nullable=True)
-    name = pgdb.Column(pgdb.String, nullable=True)
-    role = pgdb.Column(pgdb.String, nullable=True)
-    created_date = pgdb.Column(pgdb.DateTime, nullable=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String, nullable=True)
+    role = db.Column(db.String, nullable=True)
+
+
+
+class PageRefs(db.Model):
+    """Pages on which characters are mentioned."""
+
+    __tablename__ = "page_refs"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    page = db.Column(db.Integer, nullable=True)
+    people_id = db.Column(db.Integer, db.ForeignKey("people.id"), nullable=True)
+    name = db.Column(db.String, nullable=True)

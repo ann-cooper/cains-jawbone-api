@@ -1,10 +1,10 @@
-from src.project.app import pgdb
+from src.project.services import db
 
 
-class Pages(pgdb.Model):
-    __tablename__ = "pages"
+class PageOrder(db.Model):
+    __tablename__ = "page_order"
 
-    id = pgdb.Column(pgdb.Integer, primary_key=True, autoincrement=True)
-    page = pgdb.Column(pgdb.Integer, nullable=True)
-    order = pgdb.Column(pgdb.String, nullable=True)
-    created_date = pgdb.Column(pgdb.DateTime, nullable=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    page = db.Column(db.Integer, nullable=True)
+    order = db.Column(db.String, nullable=True)
+    created_date = db.Column(db.DateTime, nullable=True)
