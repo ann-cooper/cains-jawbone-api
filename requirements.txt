@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file=- requirements.in
 #
-alembic==1.9.1
+alembic==1.9.2
     # via
     #   flask-alembic
     #   flask-migrate
@@ -12,7 +12,7 @@ aniso8601==9.0.1
     # via flask-restful
 anyio==3.6.2
     # via starlette
-ariadne==0.17.0
+ariadne==0.17.1
     # via -r requirements.in
 attrs==22.2.0
     # via pytest
@@ -22,9 +22,9 @@ click==8.1.3
     # via
     #   black
     #   flask
-coverage[toml]==7.0.1
+coverage[toml]==7.0.5
     # via pytest-cov
-dnspython==2.2.1
+dnspython==2.3.0
     # via
     #   email-validator
     #   pymongo
@@ -51,7 +51,7 @@ flask-cors==3.0.10
     # via -r requirements.in
 flask-marshmallow==0.14.0
     # via -r requirements.in
-flask-migrate==4.0.0
+flask-migrate==4.0.1
     # via -r requirements.in
 flask-mongoengine==1.0.0
     # via -r requirements.in
@@ -62,7 +62,7 @@ flask-sqlalchemy==3.0.2
     #   -r requirements.in
     #   flask-alembic
     #   flask-migrate
-flask-wtf==1.0.1
+flask-wtf==1.1.1
     # via
     #   -r requirements.in
     #   flask-mongoengine
@@ -74,7 +74,7 @@ idna==3.4
     # via
     #   anyio
     #   email-validator
-iniconfig==1.1.1
+iniconfig==2.0.0
     # via pytest
 isort==5.11.4
     # via -r requirements.in
@@ -86,7 +86,7 @@ jinja2==3.1.2
     # via flask
 mako==1.2.4
     # via alembic
-markupsafe==2.1.1
+markupsafe==2.1.2
     # via
     #   jinja2
     #   mako
@@ -104,7 +104,7 @@ mongoengine==0.25.0
     # via flask-mongoengine
 mypy-extensions==0.4.3
     # via black
-packaging==22.0
+packaging==23.0
     # via
     #   marshmallow
     #   marshmallow-sqlalchemy
@@ -123,7 +123,7 @@ pyflakes==3.0.1
     # via flake8
 pymongo==4.3.3
     # via mongoengine
-pytest==7.2.0
+pytest==7.2.1
     # via
     #   -r requirements.in
     #   pytest-cov
@@ -141,7 +141,7 @@ pytest-metadata==2.0.4
     # via pytest-html
 python-json-logger==2.0.4
     # via -r requirements.in
-pytz==2022.7
+pytz==2022.7.1
     # via flask-restful
 six==1.16.0
     # via
@@ -150,7 +150,7 @@ six==1.16.0
     #   flask-restful
 sniffio==1.3.0
     # via anyio
-sqlalchemy==1.4.45
+sqlalchemy==1.4.46
     # via
     #   alembic
     #   flask-alembic
@@ -158,7 +158,7 @@ sqlalchemy==1.4.45
     #   marshmallow-sqlalchemy
 starlette==0.23.1
     # via ariadne
-tinydb==4.7.0
+tinydb==4.7.1
     # via
     #   tinydb-serialization
     #   tinymongo
