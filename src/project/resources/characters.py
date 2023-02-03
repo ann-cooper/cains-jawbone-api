@@ -37,7 +37,9 @@ class Characters(MethodView):
                 results = [schema.dump(results)]
                 logger.debug(f"Found results:{results}")
             else:
-                results = {"message": "No records", "status": 400}
+                
+                results = {"message": "No records", "status": 200}
+                logger.debug(f"No records: {results}")
 
         return render_template("character.html", form=form, results=results)
 

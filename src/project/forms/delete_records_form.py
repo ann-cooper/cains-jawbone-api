@@ -6,6 +6,7 @@ class DelRecordsForm(FlaskForm):
     name = StringField("Name", validators=[validators.optional()])
     page = IntegerField("Page", validators=[validators.optional()])
     id = IntegerField("ID", validators=[validators.optional()])
+    clue = StringField("Clue",  validators=[validators.optional()])
     record_type = SelectField(
         "Type",
         choices=[

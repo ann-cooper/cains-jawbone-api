@@ -52,6 +52,7 @@ class RecordsCleanup(MethodView):
                 model=model, data=form_data_objs.get(model_name)
             )
             logger.debug(f"Del record: {new_obj}")
+            # TODO
             record_check = get_record_by_name(model=model, name=new_obj.name)
             logger.debug(f"record_check: {record_check}")
 
@@ -82,6 +83,7 @@ class RecordsCleanup(MethodView):
             [db.session.delete(rec) for rec in records_to_del if records_to_del]
             db.session.commit()
             return redirect(url_for("records"))
-        results = get_all_records(model=People)
+        # TODO    
+        results = get_all_records(model=model)
         logger.debug("getting here")
         return render_template("delete_records.html", form=form, results=results)

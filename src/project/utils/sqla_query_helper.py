@@ -1,5 +1,5 @@
 from src import logger
-from src.project.models import PageOrder, PageRefs, People
+from src.project.models import PageOrder, PageRefs, People, ReferenceInfo
 from src.project.schemas import (
     PageOrderSchema,
     PageRefSchema,
@@ -13,8 +13,10 @@ logger = logger.get_logger(__name__)
 def get_next_id(model):
     max_id = model.query.with_entities(func.max(model.id)).first()
 
-    if max_id:
+    if max_id[0] is not None:
         return max_id[0] + 1
+    else:
+        return 1
 
 def get_record_by_id(model, id, filters=None):
     """
@@ -54,14 +56,14 @@ def get_all_records(model, filters=None):
     else:
         return records
 
-
 def search_records(model, filters):
     logger.debug(f"Using filters: {filters}")
-    records = model.query.filter(*filters)
+    records = model.query.filter(*filters).all()
+
     if records is None:
         return False
     else:
-        logger.debug(f"Record: {[x for x in records]}")
+        #logger.debug(f"Record: {[x for x in records]}")
         return records
 
 
@@ -82,6 +84,6 @@ def find_model(key: str):
         "people": {"model": People, "schema": PeopleSchema},
         "page_ref": {"model": PageRefs, "schema": PageRefSchema},
         "page_order": {"model": PageOrder, "schema": PageOrderSchema},
-        # "ref_info": {"model": ReferenceInfo, "schema": RefInfoSchema},
+        "ref_info": {"model": ReferenceInfo, "schema": RefInfoSchema},
     }
     return model_map.get(key)

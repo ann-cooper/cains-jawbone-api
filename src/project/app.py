@@ -54,10 +54,6 @@ def register_services(app, services):
         service.init_app(app)
     migrate.init_app(app, db)
 
-    # mongoengine style -- will this be available?
-    # logger.debug(f"config: {config}")
-    # connect(host=f"mongodb://{config}")
-
 
 def get_config(app_env, testing=False):
 
@@ -72,7 +68,6 @@ def get_config(app_env, testing=False):
 def create_app(app_env, testing=False):
 
     config = get_config(app_env, testing=testing)
-    logger.debug(f"mongo uri: {config.MONGODB_URI}")
     app = Flask(__name__)
     app.config.from_object(config)
     app.secret_key = config.FLASK_SECRET_KEY

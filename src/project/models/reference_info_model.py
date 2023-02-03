@@ -24,7 +24,7 @@ class ReferenceInfo(db.Model):
     __tablename__ = "references"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    page = db.Column(db.Integer, nullable=True)
-    clue = db.Column(db.String, nullable=True)
+    page = db.Column(db.Integer, nullable=False)
+    clue = db.Column(db.String, nullable=False)
     link = db.Column(db.String, nullable=True)
     info = db.Column(db.String, nullable=True)

@@ -1,12 +1,9 @@
 ARG DB_PATH
-ARG MONGO_PATH
+
 FROM python:3.9-slim-buster
 
 ARG DB_PATH
 ENV DB_PATH=${DB_PATH}
-
-ARG MONGO_PATH
-ENV MONGO_PATH=${MONGO_PATH}
 
 RUN set -ex \
     && apt-get update -y \
@@ -20,7 +17,6 @@ WORKDIR /code
 COPY . /code
 
 COPY $DB_PATH /code
-COPY $MONGO_PATH /code
 
 COPY requirements.txt ./requirements.txt
 

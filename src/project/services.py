@@ -14,6 +14,5 @@ mllw = Marshmallow()
 
 # Create alembic DB migration service
 alembic = Alembic()
-# alembic.rev_id = lambda: datetime.utcnow().strftime("%Y%m%d%H%M%S%f")  # TODO delete
 
 migrate = Migrate()

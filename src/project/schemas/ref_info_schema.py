@@ -1,10 +1,11 @@
-from marshmallow import fields
+from src.project.models import ReferenceInfo
 
 from src.project.services import mllw
 
 
-class RefInfoSchema(mllw.Schema):
-    page = fields.Str()
-    created_date = fields.Date()
-    clue = fields.Str()
-    reference = fields.Dict()
+class RefInfoSchema(mllw.SQLAlchemyAutoSchema):
+    class Meta:
+
+        model = ReferenceInfo
+        load_instance = True
+
