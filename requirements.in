@@ -10,12 +10,11 @@ flask-cors
 flask-marshmallow
 flask-migrate
 marshmallow-sqlalchemy
-flask-mongoengine
-flask-restful
 flask-sqlalchemy
 flask-wtf
 gunicorn
 isort
-tinymongo
 python-json-logger
+attrs
+cattrs
 

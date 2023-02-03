@@ -1,5 +1,6 @@
-from src.project.services import mllw
 from marshmallow import fields
+
+from src.project.services import mllw
 
 
 class RefInfoSchema(mllw.Schema):

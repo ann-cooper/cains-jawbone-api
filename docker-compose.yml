@@ -14,6 +14,7 @@ services:
             APP_ENV: local
             DB_PATH: ${DB_PATH}
             SQLALCHEMY_DATABASE_URI: sqlite:////code/${DB_PATH}
+            MONGODB_URI: ${MONGO_PATH}
             FLASK_SECRET_KEY: "notsecret"
             FLASK_APP: run.py
             RUN_UPGRADE: "1"

@@ -1,4 +1,4 @@
-from src.project.models.people_model import People, PageRefs
+from src.project.models import PageRefs, People
 from src.project.services import mllw
 
 
@@ -7,6 +7,7 @@ class PeopleSchema(mllw.SQLAlchemyAutoSchema):
 
         model = People
         load_instance = True
+
 
 class PageRefSchema(mllw.SQLAlchemyAutoSchema):
     class Meta:

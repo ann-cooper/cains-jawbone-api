@@ -1,7 +1,8 @@
-from flask_wtf import FlaskForm
-from wtforms import TextAreaField, SubmitField, StringField, IntegerField
-from wtforms.validators import DataRequired
 from datetime import datetime
+
+from flask_wtf import FlaskForm
+from wtforms import IntegerField, StringField, SubmitField, TextAreaField
+from wtforms.validators import DataRequired
 
 
 class CharacterForm(FlaskForm):

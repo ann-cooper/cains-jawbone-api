@@ -11,7 +11,6 @@ class People(db.Model):
     role = db.Column(db.String, nullable=True)
 
 
-
 class PageRefs(db.Model):
     """Pages on which characters are mentioned."""
 

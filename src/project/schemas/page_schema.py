@@ -1,4 +1,4 @@
-from src.project.models.pages_model import PageOrder
+from src.project.models import PageOrder
 from src.project.services import mllw
 
 

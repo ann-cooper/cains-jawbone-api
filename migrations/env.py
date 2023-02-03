@@ -18,8 +18,8 @@ logger = logging.getLogger('alembic.env')
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-from src.project.models.pages_model import PageOrder
-from src.project.models.people_model import PageRefs, People
+from src.project.models import PageOrder, PageRefs, People
+
 # target_metadata = mymodel.Base.metadata
 config.set_main_option(
     'sqlalchemy.url',

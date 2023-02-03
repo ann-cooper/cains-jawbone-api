@@ -1,12 +1,20 @@
 from src import logger
-from src.project.models.pages_model import PageOrder
-from src.project.models.people_model import PageRefs, People
-from src.project.models.reference_info_model import ReferenceInfo
-from src.project.schemas import PageOrderSchema, PeopleSchema, PageRefSchema, RefInfoSchema
-
+from src.project.models import PageOrder, PageRefs, People
+from src.project.schemas import (
+    PageOrderSchema,
+    PageRefSchema,
+    PeopleSchema,
+    RefInfoSchema,
+)
+from sqlalchemy import func
 
 logger = logger.get_logger(__name__)
 
+def get_next_id(model):
+    max_id = model.query.with_entities(func.max(model.id)).first()
+
+    if max_id:
+        return max_id[0] + 1
 
 def get_record_by_id(model, id, filters=None):
     """
@@ -18,6 +26,7 @@ def get_record_by_id(model, id, filters=None):
     if not record:
         return False
     return record
+
 
 def get_record_by_name(model, name, filters=None):
     """
@@ -62,6 +71,7 @@ def get_recent_records(model):
     logger.debug(f"Recent records: {records}")
     return records
 
+
 def find_model(key: str):
     """Return model class given key.
 
@@ -72,7 +82,6 @@ def find_model(key: str):
         "people": {"model": People, "schema": PeopleSchema},
         "page_ref": {"model": PageRefs, "schema": PageRefSchema},
         "page_order": {"model": PageOrder, "schema": PageOrderSchema},
-        "ref_info": {"model": ReferenceInfo, "schema": RefInfoSchema}
-
+        # "ref_info": {"model": ReferenceInfo, "schema": RefInfoSchema},
     }
     return model_map.get(key)

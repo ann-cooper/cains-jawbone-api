@@ -171,3 +171,4 @@ pg_puzzle.db
 .bash_history
 .python_history
 .sqlite_history
+mongo_db/
