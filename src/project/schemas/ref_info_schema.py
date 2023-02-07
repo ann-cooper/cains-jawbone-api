@@ -1,5 +1,4 @@
 from src.project.models import ReferenceInfo
-
 from src.project.services import mllw
 
 
@@ -8,4 +7,3 @@ class RefInfoSchema(mllw.SQLAlchemyAutoSchema):
 
         model = ReferenceInfo
         load_instance = True
-

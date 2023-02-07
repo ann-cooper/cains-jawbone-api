@@ -3,15 +3,13 @@ from flask.views import MethodView
 
 from src import logger
 from src.project.forms.delete_records_form import DelRecordsForm
-from src.project.models import PageRefs, People
-from src.project.schemas.people_schema import PeopleSchema
 from src.project.services import db
 from src.project.utils.extract_fields import DataToModelMapper
-from src.project.utils.sqla_query_helper import (
+from src.project.utils.query_helper import (
+    dump_recent_records,
     find_model,
     get_all_records,
-    get_recent_records,
-    get_record_by_name,
+    get_record_by_id,
 )
 
 logger = logger.get_logger(__name__)
@@ -20,18 +18,19 @@ logger = logger.get_logger(__name__)
 class RecordsCleanup(MethodView):
     """Remove records"""
 
-    def get(self):
+    def get(self, model):
+        logger.debug(f"Model? {model} ... {request.data}")
+        model_dict = find_model(key=model)
         form = DelRecordsForm()
-        schema = PeopleSchema()
-        results = get_recent_records(model=People)
-        if results is False:
-            results = {"message": "No records", "status": 400}
-        else:
-            results = [schema.dump(rec) for rec in results]
+        schema = model_dict.get("schema")()
+        model = model_dict.get("model")
+        results = dump_recent_records(model=model, schema=schema)
+        results = results if results else {"message": "No records", "status": 200}
 
         return render_template("delete_records.html", form=form, results=results)
 
-    def post(self):
+    def post(self, model):
+        logger.debug(f"model??? {model} ... {request.data}")
         form = DelRecordsForm()
         records_to_del = []
 
@@ -47,13 +46,13 @@ class RecordsCleanup(MethodView):
                 .form_unpack()
                 .new_objs
             )
-            logger.debug(f"Form data objs: {form_data_objs}")
+            logger.debug(f"Form data objs: {form_data_objs.get(model_name)}")
             new_obj = DataToModelMapper.pg_data_load(
                 model=model, data=form_data_objs.get(model_name)
             )
-            logger.debug(f"Del record: {new_obj}")
+            logger.debug(f"Del record: {new_obj.id}")
             # TODO
-            record_check = get_record_by_name(model=model, name=new_obj.name)
+            record_check = get_record_by_id(model=model, id=new_obj.id)
             logger.debug(f"record_check: {record_check}")
 
             if record_check:
@@ -74,6 +73,7 @@ class RecordsCleanup(MethodView):
                         flash(
                             f"Deleting records for {record_check.name} and pages {[x.page for x in page_refs]}"
                         )
+
                 flash(f"Deleting records for {record_check.id}")
             else:
                 logger.debug(f"Record not found for {new_obj}")
@@ -82,8 +82,4 @@ class RecordsCleanup(MethodView):
             )
             [db.session.delete(rec) for rec in records_to_del if records_to_del]
             db.session.commit()
-            return redirect(url_for("records"))
-        # TODO    
-        results = get_all_records(model=model)
-        logger.debug("getting here")
-        return render_template("delete_records.html", form=form, results=results)
+            return redirect(url_for("records", model=model_name.lower()))

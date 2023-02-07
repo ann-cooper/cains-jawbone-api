@@ -1,11 +1,14 @@
 import datetime
 from typing import Optional
-from src.project.services import db
+
 from attrs import define, field
+
+from src.project.services import db
+
 
 @define
 class _ReferenceInfo:
-    
+
     page: int = field()
     clue: str = field()
     source: str = field()
@@ -17,6 +20,7 @@ class _ReferenceInfo:
     def __attrs_post_init__(self):
         if not self.created_date:
             self.created_date = datetime.date.today().isoformat()
+
 
 class ReferenceInfo(db.Model):
     """Clue reference research info."""

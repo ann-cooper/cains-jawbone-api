@@ -39,7 +39,15 @@ def register_endpoints(app):
         methods=["GET"],
     )
     app.add_url_rule(
-        "/records-cleanup/", view_func=records_view, methods=["GET", "POST"]
+        "/records-cleanup/",
+        defaults={"model": "people"},
+        view_func=records_view,
+        methods=["GET", "POST"],
+    )
+    app.add_url_rule(
+        "/records-cleanup/<string:model>",
+        view_func=records_view,
+        methods=["GET", "POST"],
     )
     app.add_url_rule("/page-info/", view_func=page_info_view, methods=["GET", "POST"])
     app.add_url_rule("/page-order/", view_func=page_order_view, methods=["GET", "POST"])
