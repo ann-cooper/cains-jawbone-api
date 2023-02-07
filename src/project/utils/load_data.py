@@ -1,10 +1,11 @@
 import json
 import os
+
 from flask_sqlalchemy.model import DefaultMeta
 
 from src.project import logger
 from src.project.app import create_app
-from src.project.models import PageRefs, People, PageOrder
+from src.project.models import PageOrder, PageRefs, People
 from src.project.services import db
 
 logger = logger.get_logger(__name__)
@@ -38,9 +39,6 @@ def load_pg_data(record_group: dict, model: DefaultMeta):
         record = model(**record)
         db.session.add(record)
     db.session.commit()
-
-def load_mgdb_data(record_group: dict, model: DefaultMeta):
-    pass
 
 if __name__ == "__main__":
     app()

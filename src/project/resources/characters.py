@@ -7,13 +7,12 @@ from src.project.models import PageRefs, People
 from src.project.schemas.people_schema import PeopleSchema
 from src.project.services import db
 from src.project.utils.extract_fields import DataToModelMapper
-from src.project.utils.sqla_query_helper import (
-    get_all_records,
-    get_recent_records,
+from src.project.utils.query_helper import (
+    dump_recent_records,
+    get_next_id,
     get_record_by_id,
     get_record_by_name,
     search_records,
-    get_next_id
 )
 
 logger = logger.get_logger(__name__)
@@ -25,19 +24,14 @@ class Characters(MethodView):
         results = {}
         schema = PeopleSchema()
         if character_id is None:
-            results = get_recent_records(model=People)
-            if results:
-                results = [schema.dump(result) for result in results]
-            else:
-                results = {"message": "No records", "status": 400}
+            results = dump_recent_records(model=People, schema=schema)
+            results = results if results else {"message": "No records", "status": 200}
         else:
             results = get_record_by_id(model=People, id=character_id)
             if results:
-
                 results = [schema.dump(results)]
-                logger.debug(f"Found results:{results}")
+                # logger.debug(f"Found results:{results}")
             else:
-                
                 results = {"message": "No records", "status": 200}
                 logger.debug(f"No records: {results}")
 
