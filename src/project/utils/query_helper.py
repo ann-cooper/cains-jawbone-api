@@ -65,6 +65,7 @@ def get_record_by_page_clue(
     record = model.query.filter(*filters).one_or_none()
     if not record:
         return False
+    logger.debug(f"get rec by page clue: {type(record)}")
     return record
 
 
@@ -90,8 +91,18 @@ def search_records(model: DefaultMeta, filters: list) -> Union[list, bool]:
     if records is None:
         return False
     else:
-        # logger.debug(f"Record: {[x for x in records]}")
+        logger.debug(f"SEARCH Record: {records} {type(records)} {dir(records)}")
         return records
+
+
+def get_record_by_page_name(
+    model: DefaultMeta, page: int, name: str
+) -> Union[list, bool]:
+    result = model.query.filter(model.name == name, model.page == page).one_or_none()
+    if not result:
+        return False
+    else:
+        return result
 
 
 def dump_recent_records(

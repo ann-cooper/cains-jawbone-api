@@ -40,5 +40,6 @@ def load_pg_data(record_group: dict, model: DefaultMeta):
         db.session.add(record)
     db.session.commit()
 
+
 if __name__ == "__main__":
     app()

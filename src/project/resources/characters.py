@@ -19,54 +19,49 @@ logger = logger.get_logger(__name__)
 
 
 class Characters(MethodView):
+    def __init__(self):
+        self.model = People
+        self.schema = PeopleSchema()
+        self.form = CharacterForm()
+
     def get(self, character_id):
-        form = CharacterForm()
         results = {}
-        schema = PeopleSchema()
         if character_id is None:
-            results = dump_recent_records(model=People, schema=schema)
+            results = dump_recent_records(model=self.model, schema=self.schema)
             results = results if results else {"message": "No records", "status": 200}
         else:
             results = get_record_by_id(model=People, id=character_id)
             if results:
-                results = [schema.dump(results)]
-                # logger.debug(f"Found results:{results}")
+                results = [self.schema.dump(results)]
             else:
                 results = {"message": "No records", "status": 200}
                 logger.debug(f"No records: {results}")
 
-        return render_template("character.html", form=form, results=results)
+        return render_template("character.html", form=self.form, results=results)
 
     def post(self):
-        form = CharacterForm()
         records_to_add = []
-        if form.validate_on_submit():
+        if self.form.validate_on_submit():
             new_id = get_next_id(model=People)
-            logger.debug(f"new id: {new_id}")
-            # logger.debug(f"Type of form: {type(form)}")
             form_data_objs = (
-                DataToModelMapper(models=[PageRefs, People], form_data=form.data)
+                DataToModelMapper(models=[PageRefs, People], form_data=self.form.data)
                 .extract_db_fields()
                 .form_unpack()
                 .new_objs
             )
-            # logger.debug(f"form data objs: {form_data_objs}")
             new_character = DataToModelMapper.pg_data_load(
                 model=People, data=form_data_objs.get("People")
             )
             new_page_ref = DataToModelMapper.pg_data_load(
                 model=PageRefs, data=form_data_objs.get("PageRefs")
             )
-            logger.debug(
-                f"post new_character {new_character.name} {new_character.id} ... post new page ref {new_page_ref.name}, {new_page_ref.page}, {new_page_ref.people_id}"
-            )
             # Check for existing record
             character_check = get_record_by_name(model=People, name=new_character.name)
             if character_check:
                 character_check.role = new_character.role
-                logger.debug(f"Found character: {character_check.id}")
                 records_to_add.append(character_check)
                 new_page_ref.people_id = character_check.id
+
                 pages_check = search_records(
                     model=PageRefs,
                     filters=[
@@ -74,18 +69,17 @@ class Characters(MethodView):
                         (PageRefs.people_id == character_check.id),
                     ],
                 )
-                if pages_check.count() > 0:
+                logger.debug(f"Pages check: {pages_check}")
+                if len(pages_check) > 0:
                     logger.info(
                         f"A record for page {new_page_ref.page} for character name {character_check.name} and people_id {character_check.id} already exists."
                     )
-                    flash(
-                        f"Updating record for {character_check.name} but not page_ref {new_page_ref.page} because a record for {character_check.name} on page {new_page_ref.page} exists."
-                    )
+                    message = f"Updating record for {character_check.name} but not page_ref {new_page_ref.page} because a record for {character_check.name} on page {new_page_ref.page} exists."
                 else:
                     records_to_add.append(new_page_ref)
-                    flash(
-                        f"Updating record for {character_check.name} and page_ref {new_page_ref.page}"
-                    )
+                    message = f"Updating record for {character_check.name} and page_ref {new_page_ref.page}"
+                flash(message=message)
+
             else:
                 flash(f"Creating new record")
                 if new_character:
