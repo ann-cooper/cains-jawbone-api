@@ -1,0 +1,92 @@
+{
+  "people_form_data": {
+    "name": "Test name",
+    "page": 666,
+    "role": "Test role",
+    "submit": true,
+    "csrf_token": "ImYwZjliZTRmZjJiMmI5Y2ZkMjhiYzU0YjcyNmY2YmNjNjQwYjBkYjQi.Y7gJ9Q.FiXaeOPEL9cWS6TkNILimfR31dQ"
+  },
+  "delete_form_data": {},
+  "reference_info_form_data": {},
+  "page_refs_form_data": {},
+  "people_records": [
+    {
+      "id": 1,
+      "name": "Harry",
+      "role": "Murderer"
+    },
+    {
+      "id": 2,
+      "name": "Jessica",
+      "role": "Victim"
+    },
+    {
+      "id": 4,
+      "name": "Martine",
+      "role": "Unknown"
+    },
+    {
+      "id": 5,
+      "name": "Pithicus",
+      "role": null
+    }
+  ],
+  "reference_info_records": [
+    {
+      "id": 1,
+      "page": 71,
+      "clue": "Spartan mother",
+      "link": null,
+      "info": "Come back with your shield or upon it"
+    },
+    {
+      "id": 2,
+      "page": 71,
+      "clue": "...be the Lucius Junius Brutus of my kind",
+      "link": "https://en.wikipedia.org/wiki/Lucius_Junius_Brutus",
+      "info": "Lucius Junius Brutus (fl. 6th century BC) was the semi-legendary founder of the Roman Republic, and traditionally one of its first consuls in 509 BC. He was reputedly responsible for the expulsion of his uncle the Roman king Tarquinius Superbus after the suicide of Lucretia, which led to the overthrow of the Roman monarchy. He was involved in the abdication of fellow consul Tarquinius Collatinus, and executed two of his sons for plotting the restoration of the Tarquins.[2] He was claimed as an ancestor of the Roman gens Junia, including Decimus Junius Brutus, and Marcus Junius Brutus, the most famous of Julius Caesar's assassins. Traditions about his life may have been fictional, and some scholars argue that it was the Etruscan king Porsenna who overthrew Tarquinius. The plebeian status of the Junia gens has also raised doubts about his position as a consul and the alleged initial patrician domination of the office. Depicted as the nephew of Tarquinius, he may have symbolized the internal tensions that occurred during the transition between the monarchy and the republic.[2] "
+    },
+    {
+      "id": 3,
+      "page": 16,
+      "clue": "...sang o' his love and fondly sae did I o' mine",
+      "link": null,
+      "info": null
+    }
+  ],
+  "page_refs_records": [
+    {
+      "id": 1,
+      "page": 50,
+      "people_id": 4,
+      "name": "Martine"
+    },
+    {
+      "id": 2,
+      "page": 10
+    },
+    {
+      "id": 3,
+      "page": 17,
+      "people_id": 2,
+      "name": "Jessica"
+    }
+  ],
+  "page_order_records": [
+    {
+      "id": 1,
+      "page": 20,
+      "order": 81
+    },
+    {
+      "id": 5,
+      "page": 63,
+      "order": 15
+    },
+    {
+      "id": 6,
+      "page": 3,
+      "order": 11
+    }
+  ]
+}

@@ -17,7 +17,6 @@ logger = logger.get_logger(__name__)
 
 
 def register_endpoints(app):
-
     hello_view = Hello.as_view("hello")
     character_view = Characters.as_view("characters")
     records_view = RecordsCleanup.as_view("records")
@@ -57,24 +56,21 @@ def register_endpoints(app):
 
 
 def register_services(app, services):
-
     for service in services:
         service.init_app(app)
     migrate.init_app(app, db)
 
 
 def get_config(app_env, testing=False):
-
     config = CONFIGURATIONS[app_env]
 
     if testing is True:
-        config.POSTGRES_DB += "_testing"
+        config.SQLALCHEMY_DATABASE_URI = "sqlite:////code/pg_puzzle_testing.db"
 
     return config
 
 
 def create_app(app_env, testing=False):
-
     config = get_config(app_env, testing=testing)
     app = Flask(__name__)
     app.config.from_object(config)

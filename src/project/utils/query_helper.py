@@ -24,19 +24,24 @@ def get_next_id(model: DefaultMeta) -> int:
         return 1
 
 
-def get_record_by_id(model: DefaultMeta, id: int, filters: list = None):
+def get_record_by_id(
+    model: DefaultMeta, id: int, filters: list = None
+) -> Union[bool, People, PageRefs, PageOrder, ReferenceInfo]:
     """
     Return a sqlalchemy record by id or False.
     """
     filters = [] if not filters else filters
     filters.append(model.id == id)
     record = model.query.filter(*filters).one_or_none()
+
     if not record:
         return False
     return record
 
 
-def get_record_by_name(model: DefaultMeta, name: str, filters: list = None):
+def get_record_by_name(
+    model: DefaultMeta, name: str, filters: list = None
+) -> Union[bool, People]:
     """
     Return a sqlalchemy record by name or False.
     """
@@ -50,7 +55,7 @@ def get_record_by_name(model: DefaultMeta, name: str, filters: list = None):
 
 def get_record_by_page_clue(
     model: DefaultMeta, page: int, clue: str, filters: list = None
-):
+) -> Union[bool, ReferenceInfo]:
     """Return record by page number and clue string or False.
 
     Args:
@@ -65,7 +70,7 @@ def get_record_by_page_clue(
     record = model.query.filter(*filters).one_or_none()
     if not record:
         return False
-    logger.debug(f"get rec by page clue: {type(record)}")
+
     return record
 
 
@@ -85,13 +90,11 @@ def get_all_records(model: DefaultMeta, filters: list = None) -> Union[list, boo
 
 
 def search_records(model: DefaultMeta, filters: list) -> Union[list, bool]:
-    logger.debug(f"Using filters: {filters}")
     records = model.query.filter(*filters).all()
 
     if records is None:
         return False
     else:
-        logger.debug(f"SEARCH Record: {records} {type(records)} {dir(records)}")
         return records
 
 
@@ -109,9 +112,6 @@ def dump_recent_records(
     model: DefaultMeta, schema: any, limit: int = 5
 ) -> Union[list, bool]:
     records = model.query.order_by(model.id.desc()).limit(limit).all()
-    logger.debug(
-        f"Recent records: {type(records[0])} ... model {type(model)} ... schema {type(schema)}"
-    )
     if records:
         return [schema.dump(rec) for rec in records]
     else:
