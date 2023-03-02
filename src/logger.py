@@ -20,7 +20,6 @@ class CustomJsonFormatter(jsonlogger.JsonFormatter):
             log_record["service"] = os.getenv("IMAGENAME", "service-name-not-found")
 
 
-
 def get_logger(name, level=logging.DEBUG):
     """Sets up a json logger.
 

@@ -4,7 +4,7 @@ from setuptools import find_packages, setup
 
 with open("requirements.txt", encoding="utf-8") as rf:
     reqs = rf.readlines()
-    out_reqs = [x.strip() for x in reqs if re.search(r'^\w.*', x)]
+    out_reqs = [x.strip() for x in reqs if re.search(r"^\w.*", x)]
 
 setup(
     name="cains_jawbone",

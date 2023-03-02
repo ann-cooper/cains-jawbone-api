@@ -8,7 +8,6 @@ from src.project.services import db
 
 @define
 class _ReferenceInfo:
-
     page: int = field()
     clue: str = field()
     source: str = field()

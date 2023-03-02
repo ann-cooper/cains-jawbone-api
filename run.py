@@ -3,7 +3,7 @@ import os
 
 from src.project.app import create_app
 
-app_env = os.getenv('APP_ENV', 'local')
+app_env = os.getenv("APP_ENV", "local")
 app = create_app(app_env)
 
 if __name__ == "__main__":

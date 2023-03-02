@@ -168,6 +168,7 @@ tags
 # local
 todo.md 
 pg_puzzle.db
+pg_puzzle_testing.db
 .bash_history
 .python_history
 .sqlite_history

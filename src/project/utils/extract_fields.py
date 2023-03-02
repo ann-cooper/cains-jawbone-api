@@ -62,5 +62,5 @@ class DataToModelMapper:
         except Exception as err:
             logger.warn(f"Error: {err} in pg_data_load")
         else:
-            logger.debug(f"New object loaded: {new_obj} type: {type(new_obj)}")
+            logger.info(f"New object loaded: {new_obj} type: {type(new_obj)}")
             return new_obj

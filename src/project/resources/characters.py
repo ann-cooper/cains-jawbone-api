@@ -35,7 +35,6 @@ class Characters(MethodView):
                 results = [self.schema.dump(results)]
             else:
                 results = {"message": "No records", "status": 200}
-                logger.debug(f"No records: {results}")
 
         return render_template("character.html", form=self.form, results=results)
 
@@ -69,7 +68,6 @@ class Characters(MethodView):
                         (PageRefs.people_id == character_check.id),
                     ],
                 )
-                logger.debug(f"Pages check: {pages_check}")
                 if len(pages_check) > 0:
                     logger.info(
                         f"A record for page {new_page_ref.page} for character name {character_check.name} and people_id {character_check.id} already exists."

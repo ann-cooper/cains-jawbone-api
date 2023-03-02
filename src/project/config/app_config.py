@@ -2,13 +2,14 @@ import os
 
 
 class DefaultConfig:
-
     APP_ENV = os.getenv("APP_ENV", "local")
     DEBUG = True
     FLASK_SECRET_KEY = os.getenv("FLASK_SECRET_KEY")
 
-    # Postgres
-    SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
+    # Sqlite
+    SQLALCHEMY_DATABASE_URI = os.getenv(
+        "SQLALCHEMY_DATABASE_URI", "sqlite:////tests/pg_puzzle.db"
+    )
     # Mongo
     MONGODB_URI = os.getenv("MONGODB_URI")
     MONGODB_SETTINGS = {"host": f"mongodb://{MONGODB_URI}"}
