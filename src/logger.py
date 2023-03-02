@@ -20,13 +20,8 @@ class CustomJsonFormatter(jsonlogger.JsonFormatter):
             log_record["service"] = os.getenv("IMAGENAME", "service-name-not-found")
 
 
-def get_python_version():
-    """Returns the Python version in use."""
-    major, minor, micro, level, serial = sys.version_info
-    return float(".".join([str(major), str(minor)]))
 
-
-def get_logger(name, level=logging.DEBUG, version=get_python_version()):
+def get_logger(name, level=logging.DEBUG):
     """Sets up a json logger.
 
     Parameters
