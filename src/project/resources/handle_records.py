@@ -23,9 +23,7 @@ class RecordsCleanup(MethodView):
         self.form = DelRecordsForm()
 
     def get(self, model):
-        logger.debug(f"Delete: {model} ... {request.view_args}")
         model = request.view_args.get("model")
-        logger.debug(f"Delete: {model}")
         model_dict = find_model(key=model)
         schema = model_dict.get("schema")()
         model = model_dict.get("model")
@@ -35,15 +33,12 @@ class RecordsCleanup(MethodView):
         return render_template("delete_records.html", form=self.form, results=results)
 
     def post(self, model):
-        logger.debug(f"Delete post {model}")
         records_to_del = []
 
         if self.form.validate_on_submit():
             model_dict = find_model(key=request.form.get("record_type"))
             model = model_dict.get("model")
-            # schema = model_dict.get("schema")()
             model_name = model().__class__.__name__
-            logger.debug(f"Prep delete of {self.form.data}")
             form_data_objs = (
                 DataToModelMapper(models=[model], form_data=self.form.data)
                 .extract_db_fields()
@@ -56,9 +51,6 @@ class RecordsCleanup(MethodView):
             record_check = get_record_by_id(model=model, id=new_obj.id)
 
             if record_check:
-                logger.debug(
-                    f"Found {model_name} record to delete for {record_check.id}. "
-                )
                 message = f"Deleting records for {record_check.id}"
                 records_to_del.append(record_check)
                 if model_name == "People":
