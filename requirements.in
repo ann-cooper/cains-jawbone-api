@@ -3,6 +3,7 @@ black
 pytest
 pytest-html
 pytest-coverage
+pytest-flask
 flake8
 flask
 flask-alembic
