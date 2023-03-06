@@ -18,5 +18,6 @@ class PageRefs(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     page = db.Column(db.Integer, nullable=True)
-    people_id = db.Column(db.Integer, db.ForeignKey("people.id"), nullable=True)
+    people_id = db.Column(db.Integer, db.ForeignKey("people.id"), nullable=False)
+    # TODO
     name = db.Column(db.String, nullable=True)

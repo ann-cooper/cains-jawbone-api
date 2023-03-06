@@ -1,14 +1,14 @@
 {
-  "people_form_data": {
+  "people_form_data": 
+    {
     "name": "Test name",
-    "page": 666,
+    "page": 66,
     "role": "Test role",
     "submit": true,
     "csrf_token": "ImYwZjliZTRmZjJiMmI5Y2ZkMjhiYzU0YjcyNmY2YmNjNjQwYjBkYjQi.Y7gJ9Q.FiXaeOPEL9cWS6TkNILimfR31dQ"
-  },
+    },
   "delete_form_data": {},
   "reference_info_form_data": {},
-  "page_refs_form_data": {},
   "people_records": [
     {
       "id": 1,
