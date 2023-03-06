@@ -33,6 +33,7 @@ def app():
             except Exception as err:
                 logger.warning(f"Error trying to clean records from {table}: {err}")
         db.create_all()
+        load_all_test_data()
     return app
 
 
@@ -45,8 +46,7 @@ def session():
     db.session.rollback()
 
 
-@pytest.fixture(scope="function")
-def load_all_test_data(session):
+def load_all_test_data():
     """Create a testing app context to load test data."""
 
     logger.info("Loading relational data in testing app.")
