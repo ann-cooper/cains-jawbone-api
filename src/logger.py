@@ -17,7 +17,7 @@ class CustomJsonFormatter(jsonlogger.JsonFormatter):
         super().add_fields(log_record, record, message_dict)
         log_record["status"] = log_record.get("levelname")
         if not log_record.get("service"):
-            log_record["service"] = os.getenv("IMAGENAME", "service-name-not-found")
+            log_record["service"] = os.getenv("IMAGENAME", "name-not-found")
 
 
 def get_logger(name, level=logging.DEBUG):

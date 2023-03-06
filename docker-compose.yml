@@ -17,6 +17,7 @@ services:
             FLASK_SECRET_KEY: "notsecret"
             FLASK_APP: run.py
             RUN_UPGRADE: "1"
+            IMAGENAME: "puzzle_api"
 
 
 networks: 
