@@ -6,7 +6,7 @@ logger = logger.get_logger(__name__)
 
 
 class TestDataLoad:
-    def test_load_pg_data(self, app, session):
+    def test_load_pg_data(self, app):
         check_people = get_all_records(model=People)
         check_page_refs = get_all_records(model=PageRefs)
         check_page_order = get_all_records(model=PageOrder)

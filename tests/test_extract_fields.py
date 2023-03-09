@@ -4,19 +4,13 @@ import pytest
 
 from src.project.models import PageRefs, People
 from src.project.utils.extract_fields import DataToModelMapper
+from src.project.models.reference_info_model import _ReferenceInfo
 
 
 @pytest.fixture(scope="function")
-def people_page_refs_data():
-    with open("tests/demo_data.json", "r") as f:
-        data = json.load(f)
-    return data.get("people_form_data")
-
-
-@pytest.fixture(scope="function")
-def data_to_model_mapper(people_page_refs_data):
+def data_to_model_mapper(people_form_data):
     mapper = DataToModelMapper(
-        models=[People, PageRefs], form_data=people_page_refs_data
+        models=[People, PageRefs], form_data=people_form_data.get("new")
     )
 
     return mapper
@@ -44,8 +38,18 @@ def test_form_unpack(mapper_with_keys):
     }
     assert results.new_objs == expected
 
+def test_pg_data_load_exception():
+    with pytest.raises(TypeError):
+        DataToModelMapper.pg_data_load(People, {'a': 2, 'b': 3})
 
-def test_pg_data_load():
-    data = {"id": 4, "name": "Martine", "role": "Unknown"}
-    result = DataToModelMapper.pg_data_load(People, data)
-    assert result.name == "Martine"
+def test_extract_db_fields_exception():
+    with pytest.raises(TypeError):
+        DataToModelMapper([_ReferenceInfo], {"data": "does not matter for this test"}).extract_db_fields()
+
+
+class TestPGDataLoad:
+    def test_pg_data_load(self, app):
+        data = {"id": 4, "name": "Martine", "role": "Unknown"}
+        result = DataToModelMapper.pg_data_load(People, data)
+        assert result.name == "Martine"
+

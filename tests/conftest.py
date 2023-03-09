@@ -8,37 +8,61 @@ from src.project.app import create_app
 from src.project.models import PageOrder, PageRefs, People, ReferenceInfo
 from src.project.services import alembic, db
 from src.project.utils.load_data import load_pg_data
+from src.project.forms import CharacterForm
 
 logger = logger.get_logger(__name__)
 
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="session", autouse=True)
 def app():
     app_env = "test"
     app = create_app(app_env)
-
-    with app.app_context():
-        table_models = [People, PageOrder, PageRefs, ReferenceInfo]
-        for table in table_models:
-            try:
-                table.query.delete()
-                db.session.commit()
-                logger.info(f"Cleaning {table} records for test session.")
-            except Exception as err:
-                logger.warning(f"Error trying to clean records from {table}: {err}")
-        db.create_all()
-        load_all_test_data()
-    return app
+    yield app
 
 
 @pytest.fixture(scope="function")
-def session():
-    db.session.begin_nested()
-    logger.info("Beginning nested")
-    yield db.session
-    logger.info("Rolling back")
-    db.session.rollback()
+def clean_test_tables(app):
+    yield
+    table_models = [People, PageOrder, PageRefs, ReferenceInfo]
+    for table in table_models:
+        try:
+            table.query.delete()
+            db.session.commit()
+        except Exception as err:
+            logger.warning(f"Error trying to clean records from {table}: {err}")
+    db.create_all()
+    load_all_test_data()
+
+
+@pytest.fixture(scope="function")
+def empty_test_tables(app):
+    table_models = [People, PageOrder, PageRefs, ReferenceInfo]
+    for table in table_models:
+        try:
+            table.query.delete()
+            db.session.commit()
+        except Exception as err:
+            logger.warning(f"Error trying to clean records from {table}: {err}")
+    db.create_all()
+
+
+@pytest.fixture(scope="function")
+def people_form_data():
+    with open("tests/demo_data.json", "r") as f:
+        data = json.load(f)
+    return data.get("people_form_data")
+
+@pytest.fixture(scope="function")
+def page_refs_form_data():
+    with open("tests/demo_data.json", "r") as f:
+        data = json.load(f)
+    return data.get("page_info_form_data")
+
+@pytest.fixture(scope="function")
+def people_form_test_data(people_form_data):
+
+    return {k: CharacterForm(data=v) for k,v in people_form_data.items()}
 
 
 def load_all_test_data():

@@ -1,6 +1,10 @@
 from tests import params 
 import pytest
-from src.project.forms import CharacterForm
+import json
+
+from src.project.models import People, PageRefs
+from src.project.utils.query_helper import get_record_by_name, get_record_by_page_name
+from src.project.services import db
 
 
 class TestCharacters:
@@ -9,8 +13,27 @@ class TestCharacters:
         response = client.get(endpoint)
         assert response.status_code == expected
 
-    def test_post_characters(self, app, session, client):
-        form = CharacterForm(data={"name": "Test Character", "role": "Unknown", "page": 30})     
+    def test_post_characters_new(self, app, clean_test_tables, client, people_form_test_data): 
+        form = people_form_test_data.get('new')
         response = client.post("/characters/", data=form.data, follow_redirects=True)
-        print(response.status_code, response.json)
-        # TODO lookup new record and assert
+
+        check = get_record_by_name(model=People, name="Test name")
+        check_page = get_record_by_page_name(model=PageRefs, name="Test name", page=66)
+
+        assert check
+
+    def test_post_characters_update(self, app, clean_test_tables, client, people_form_test_data): 
+        form = people_form_test_data.get('update')
+        response = client.post("/characters/", data=form.data, follow_redirects=True)
+
+        check = get_record_by_name(model=People, name="Martine")
+        check_page = get_record_by_page_name(model=PageRefs, name="Martine", page=50)
+
+        assert check.role == "Murderer"
+        assert check_page.page == 50
+
+    def test_get_no_records(self, app, client, empty_test_tables, clean_test_tables):
+        response = client.get("/characters/")
+
+        assert response.status_code == 200
+        assert "No records" in response.text

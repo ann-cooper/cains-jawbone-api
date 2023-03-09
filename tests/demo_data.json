@@ -1,14 +1,49 @@
 {
-  "people_form_data": 
-    {
-    "name": "Test name",
-    "page": 66,
-    "role": "Test role",
-    "submit": true,
-    "csrf_token": "ImYwZjliZTRmZjJiMmI5Y2ZkMjhiYzU0YjcyNmY2YmNjNjQwYjBkYjQi.Y7gJ9Q.FiXaeOPEL9cWS6TkNILimfR31dQ"
-    },
+  "people_form_data": {
+    "new":
+      {
+      "name": "Test name",
+      "page": 66,
+      "role": "Test role",
+      "submit": true,
+      "csrf_token": "ImYwZjliZTRmZjJiMmI5Y2ZkMjhiYzU0YjcyNmY2YmNjNjQwYjBkYjQi.Y7gJ9Q.FiXaeOPEL9cWS6TkNILimfR31dQ"
+      },
+    "update":
+      {
+        "name": "Martine",
+        "page": 50,
+        "role": "Murderer",
+        "submit": true
+      }
+  },
   "delete_form_data": {},
-  "reference_info_form_data": {},
+  "reference_info_form_data": {
+    "new": {
+      "clue": "Test clue",
+      "page": 10,
+      "link": "test.link",
+      "info": "This is the clue info",
+      "submit": true
+    },
+    "update": {
+      "clue": "Spartan mother",
+      "page": 71,
+      "link": "updated.link.here",
+      "submit": true
+    }
+  },
+  "page_info_form_data": {
+    "new": {
+      "page":100,
+      "name": "Test name",
+      "submit": true
+    },
+    "update": {
+      "page": 10,
+      "name": "Harry",
+      "submit": true
+    }
+  },
   "people_records": [
     {
       "id": 1,

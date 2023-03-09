@@ -16,32 +16,32 @@ from src.project.utils.query_helper import (
 
 
 class TestQueryHelpers:
-    def test_get_next_id(self, app, session):
+    def test_get_next_id(self, app):
         next_id = get_next_id(model=People)
         assert next_id == 6
 
-    def test_get_record_by_id(self, app, session):
+    def test_get_record_by_id(self, app):
         result = get_record_by_id(model=PageRefs, id=3)
         assert result.page == 17
         assert result.people_id == 2
 
-    def test_get_record_by_name(self, app, session):
+    def test_get_record_by_name(self, app):
         result = get_record_by_name(model=People, name="Harry")
         assert result.role == "Murderer"
 
-    def test_get_record_by_page_clue(self, app, session):
+    def test_get_record_by_page_clue(self, app):
         result = get_record_by_page_clue(
             model=ReferenceInfo, page=71, clue="Spartan mother"
         )
         assert result.id == 1
         assert result.info == "Come back with your shield or upon it"
 
-    def test_get_all_records(self, app, session):
+    def test_get_all_records(self, app):
         results = get_all_records(model=PageOrder)
 
         assert results.total == 3
 
-    def test_search_records(self, app, session):
+    def test_search_records(self, app):
         results = search_records(
             model=PageRefs, filters=[(PageRefs.page == 50), (PageRefs.people_id == 4)]
         )
@@ -49,19 +49,19 @@ class TestQueryHelpers:
         assert len(results) == 1
         assert results[0].id == 1
 
-    def test_get_record_by_page_name(self, app, session):
+    def test_get_record_by_page_name(self, app):
         result = get_record_by_page_name(model=PageRefs, name="Jessica", page=17)
 
         assert result.id == 3
 
-    def test_dump_recent_records(self, app, session):
+    def test_dump_recent_records(self, app):
         results = dump_recent_records(
             model=ReferenceInfo, schema=RefInfoSchema(), limit=2
         )
         page_numbers = [item.get("page") for item in results]
         assert [16, 71] == page_numbers
 
-    def test_find_model(self, app, session):
+    def test_find_model(self, app):
         result = find_model(key="pageorder")
 
         assert result.get("model") == PageOrder
