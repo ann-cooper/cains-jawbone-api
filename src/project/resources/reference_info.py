@@ -2,7 +2,7 @@ from flask import flash, redirect, render_template, url_for
 from flask.views import MethodView
 
 from src import logger
-from src.project.forms.post_ref_info_form import RefInfoForm
+from src.project.forms import RefInfoForm
 from src.project.models import ReferenceInfo
 from src.project.schemas import RefInfoSchema
 from src.project.services import db

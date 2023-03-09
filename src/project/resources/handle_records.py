@@ -2,7 +2,7 @@ from flask import flash, redirect, render_template, request, url_for
 from flask.views import MethodView
 
 from src import logger
-from src.project.forms.delete_records_form import DelRecordsForm
+from src.project.forms import DelRecordsForm
 from src.project.models import PageRefs
 from src.project.services import db
 from src.project.utils.extract_fields import DataToModelMapper
