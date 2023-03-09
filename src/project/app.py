@@ -61,17 +61,14 @@ def register_services(app, services):
     migrate.init_app(app, db)
 
 
-def get_config(app_env, testing=False):
+def get_config(app_env):
     config = CONFIGURATIONS[app_env]
-
-    if testing is True:
-        config.SQLALCHEMY_DATABASE_URI = "sqlite:////code/pg_puzzle_testing.db"
 
     return config
 
 
 def create_app(app_env, testing=False):
-    config = get_config(app_env, testing=testing)
+    config = get_config(app_env)
     app = Flask(__name__)
     app.config.from_object(config)
     app.secret_key = config.FLASK_SECRET_KEY

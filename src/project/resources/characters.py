@@ -1,4 +1,4 @@
-from flask import flash, redirect, render_template, url_for
+from flask import flash, redirect, render_template, url_for, session
 from flask.views import MethodView
 
 from src import logger
@@ -41,6 +41,7 @@ class Characters(MethodView):
     def post(self):
         records_to_add = []
         if self.form.validate_on_submit():
+            logger.debug(f"In characters POST form validate on submit, session: {session}")
             new_id = get_next_id(model=People)
             form_data_objs = (
                 DataToModelMapper(models=[PageRefs, People], form_data=self.form.data)

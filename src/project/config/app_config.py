@@ -24,6 +24,8 @@ class LocalConfig(DefaultConfig):
 
 class TestConfig(DefaultConfig):
     TESTING = True
+    WTF_CSRF_ENABLED = False
+    SQLALCHEMY_DATABASE_URI = "sqlite:////code/pg_puzzle_testing.db"
 
 
 CONFIGURATIONS = {"local": LocalConfig, "test": TestConfig, "dev": LocalConfig}

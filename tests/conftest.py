@@ -12,16 +12,11 @@ from src.project.utils.load_data import load_pg_data
 logger = logger.get_logger(__name__)
 
 
-@pytest.fixture(scope="session")
-def new_sqlite_db():
-    # create the new db in the test session
-    pass
-
 
 @pytest.fixture(scope="session")
 def app():
-    app_env = os.getenv("APP_ENV")
-    app = create_app(app_env, testing=True)
+    app_env = "test"
+    app = create_app(app_env)
 
     with app.app_context():
         table_models = [People, PageOrder, PageRefs, ReferenceInfo]
