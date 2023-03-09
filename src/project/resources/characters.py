@@ -1,4 +1,4 @@
-from flask import flash, redirect, render_template, url_for, session
+from flask import flash, redirect, render_template, url_for
 from flask.views import MethodView
 
 from src import logger
@@ -41,7 +41,6 @@ class Characters(MethodView):
     def post(self):
         records_to_add = []
         if self.form.validate_on_submit():
-            logger.debug(f"In characters POST form validate on submit, session: {session}")
             new_id = get_next_id(model=People)
             form_data_objs = (
                 DataToModelMapper(models=[PageRefs, People], form_data=self.form.data)
@@ -57,6 +56,7 @@ class Characters(MethodView):
             )
             # Check for existing record
             character_check = get_record_by_name(model=People, name=new_character.name)
+
             if character_check:
                 character_check.role = new_character.role
                 records_to_add.append(character_check)
@@ -80,7 +80,7 @@ class Characters(MethodView):
                 flash(message=message)
 
             else:
-                flash(f"Creating new record")
+                flash("Creating new record")
                 if new_character:
                     new_character.id = new_id
                     records_to_add.append(new_character)

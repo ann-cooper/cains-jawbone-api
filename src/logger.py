@@ -4,7 +4,6 @@ Structured logging reference: https://github.com/madzak/python-json-logger
 """
 import logging
 import os
-import sys
 
 from pythonjsonlogger import jsonlogger
 

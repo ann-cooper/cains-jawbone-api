@@ -1,12 +1,14 @@
+from flask_sqlalchemy.model import DefaultMeta
 from sqlalchemy import inspect
 
 from src import logger
+from src.project.services import db
 
 logger = logger.get_logger(__name__)
 
 
 class DataToModelMapper:
-    def __init__(self, models, form_data):
+    def __init__(self, models: list, form_data: dict):
         self.models = models
         self.form_data = form_data
         self.keys_dict = None
@@ -26,8 +28,9 @@ class DataToModelMapper:
                 model().__class__.__name__: inspect(model().__class__).c.keys()
                 for model in self.models
             }
-        except Exception as err:
+        except TypeError as err:
             logger.warn(f"Error in extract_db_fields: {err}")
+            raise
         else:
             return self
 
@@ -47,7 +50,7 @@ class DataToModelMapper:
         return self
 
     @staticmethod
-    def pg_data_load(model, data):
+    def pg_data_load(model: DefaultMeta, data: dict) -> db.Model:
         """Loads extracted data to a model.
 
         Args:
@@ -55,12 +58,13 @@ class DataToModelMapper:
             data (dict): A dict of data to me loaded
 
         Returns:
-            _type_: _description_
+            Model object: instance of the data loaded into the model
         """
         try:
             new_obj = model(**data)
-        except Exception as err:
+        except TypeError as err:
             logger.warn(f"Error: {err} in pg_data_load")
+            raise
         else:
-            logger.info(f"New object loaded: {new_obj} type: {type(new_obj)}")
+            logger.info(f"New object loaded: {type(model)} type: {type(new_obj)}")
             return new_obj
