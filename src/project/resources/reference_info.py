@@ -46,15 +46,15 @@ class ReferenceInfoHandler(MethodView):
                 check.info = new_reference.info
                 check.link = new_reference.link
                 records_to_add.append(check)
-                flash(f"Will update record for {check.page}: {check.clue}.")
+                message = f"Will update record for {check.page}: {check.clue}."
             else:
                 if new_reference:
-                    flash(
-                        f"Creating new records for {new_reference.page}: {new_reference.clue}."
-                    )
+                    message = f"Creating new records for {new_reference.page}: {new_reference.clue}."
                     new_reference.id = new_id
                     records_to_add.append(new_reference)
 
+            flash(message=message)
+            logger.info(message)
             db.session.add_all(records_to_add)
             db.session.commit()
             return redirect(url_for("reference_info_handler"))
