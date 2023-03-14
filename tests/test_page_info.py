@@ -20,7 +20,7 @@ class TestPageInfo:
         self, app, client, clean_test_tables, page_form_test_data
     ):
         form = page_form_test_data.get("new")
-        response = client.post("/page-info/", data=form.data, follow_redirects=True)
+        client.post("/page-info/", data=form.data, follow_redirects=True)
         check = get_record_by_page_name(model=PageRefs, name="Test name", page=100)
 
         assert check
@@ -29,7 +29,7 @@ class TestPageInfo:
         self, app, client, clean_test_tables, page_form_test_data
     ):
         form = page_form_test_data.get("update")
-        response = client.post("/page-info/", data=form.data, follow_redirects=True)
+        client.post("/page-info/", data=form.data, follow_redirects=True)
         check = get_record_by_page_name(model=PageRefs, name="Harry", page=10)
 
         assert check

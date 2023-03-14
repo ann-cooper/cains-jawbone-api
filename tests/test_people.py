@@ -19,18 +19,19 @@ class TestCharacters:
         self, app, clean_test_tables, client, people_form_test_data
     ):
         form = people_form_test_data.get("new")
-        response = client.post("/characters/", data=form.data, follow_redirects=True)
+        client.post("/characters/", data=form.data, follow_redirects=True)
 
         check = get_record_by_name(model=People, name="Test name")
         check_page = get_record_by_page_name(model=PageRefs, name="Test name", page=66)
 
         assert check
+        assert check_page
 
     def test_post_characters_update(
         self, app, clean_test_tables, client, people_form_test_data
     ):
         form = people_form_test_data.get("update")
-        response = client.post("/characters/", data=form.data, follow_redirects=True)
+        client.post("/characters/", data=form.data, follow_redirects=True)
 
         check = get_record_by_name(model=People, name="Martine")
         check_page = get_record_by_page_name(model=PageRefs, name="Martine", page=50)

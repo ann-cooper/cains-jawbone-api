@@ -5,7 +5,7 @@ import pytest
 
 from src import logger
 from src.project.app import create_app
-from src.project.forms import CharacterForm, DelRecordsForm, PageRefForm, RefInfoForm
+from src.project.forms import CharacterForm, DelRecordsForm, RefInfoForm
 from src.project.models import PageOrder, PageRefs, People, ReferenceInfo
 from src.project.services import db
 from src.project.utils.load_data import load_pg_data
