@@ -1,6 +1,7 @@
 import json
 import os
 
+from flask import Flask
 from flask_sqlalchemy.model import DefaultMeta
 
 from src import logger
@@ -11,7 +12,7 @@ from src.project.services import db
 logger = logger.get_logger(__name__)
 
 
-def app():
+def app() -> Flask:
     """Create an app context to load test data outside of a test session."""
     app_env = os.getenv("APP_ENV")
     app = create_app(app_env, testing=True)
@@ -27,7 +28,7 @@ def app():
     return app
 
 
-def load_pg_data(record_group: dict, model: DefaultMeta):
+def load_pg_data(record_group: dict, model: DefaultMeta) -> None:
     """Load a dictionary of records into a relational model.
 
     Args:

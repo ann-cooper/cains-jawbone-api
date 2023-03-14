@@ -173,3 +173,4 @@ pg_puzzle_testing.db
 .python_history
 .sqlite_history
 mongo_db/
+src/project/migrations/*

@@ -16,7 +16,7 @@ from src.project.services import alembic, db, migrate, mllw
 logger = logger.get_logger(__name__)
 
 
-def register_endpoints(app):
+def register_endpoints(app: Flask) -> None:
     hello_view = Hello.as_view("hello")
     character_view = Characters.as_view("characters")
     records_view = RecordsCleanup.as_view("records")
@@ -55,19 +55,19 @@ def register_endpoints(app):
     )
 
 
-def register_services(app, services):
+def register_services(app: Flask, services: list) -> None:
     for service in services:
         service.init_app(app)
     migrate.init_app(app, db)
 
 
-def get_config(app_env):
+def get_config(app_env: str):
     config = CONFIGURATIONS[app_env]
 
     return config
 
 
-def create_app(app_env, testing=False):
+def create_app(app_env: str) -> Flask:
     config = get_config(app_env)
     app = Flask(__name__)
     app.config.from_object(config)
