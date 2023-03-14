@@ -90,3 +90,11 @@ class Characters(MethodView):
             db.session.add_all(records_to_add)
             db.session.commit()
             return redirect(url_for("characters"))
+
+        else:
+            message = (
+                f"Form validation error on field 'role': {self.form.errors.get('role')}"
+            )
+            flash(message=message)
+            logger.info(message)
+            return redirect(url_for("characters"))

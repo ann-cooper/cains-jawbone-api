@@ -44,3 +44,11 @@ class TestCharacters:
 
         assert response.status_code == 200
         assert "No records" in response.text
+
+    def test_form_validation_error(self, app, client, caplog):
+        client.post(
+            "/characters/",
+            data={"name": "Test", "page": 1, "role": "buddy"},
+            follow_redirects=True,
+        )
+        assert "Form validation error" in caplog.text

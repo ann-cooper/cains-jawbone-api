@@ -32,7 +32,7 @@ def test_form_unpack(mapper_with_keys):
     results = mapper_with_keys.form_unpack()
     expected = {
         "PageRefs": {"id": None, "name": "Test name", "page": 66, "people_id": None},
-        "People": {"id": None, "name": "Test name", "role": "Test role"},
+        "People": {"id": None, "name": "Test name", "role": "Test"},
     }
     assert results.new_objs == expected
 
