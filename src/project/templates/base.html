@@ -8,15 +8,21 @@
         {% endif %}
     </head>
     <body>
-        <div>Add or updatee a character record:
-            <a href="{{ url_for('characters') }}">characters</a>
+        <div>
+            <a href="{{ url_for('characters') }}">Characters</a>
         </div>
-        <div>Delete a record:
-            <a href="{{ url_for('records') }}">Delete</a>
+        <div>
+            <a href="{{ url_for('records') }}">Delete a record</a>
         </div>
-        <div>Add or update a reference info record:
-            <a href="{{ url_for('reference_info_handler') }}">reference-info</a>
+        <div>
+            <a href="{{ url_for('reference_info_handler') }}">Clues</a>
         </div>
+        <div>
+            <a href="{{ url_for('page_info_handler') }}">Page Info</a>
+        </div>
+        <div>
+            <a href="{{ url_for('page_order_handler') }}">Page Order</a>
+        </div>      
         <hr>
         {% with messages = get_flashed_messages() %}
         {% if messages %}

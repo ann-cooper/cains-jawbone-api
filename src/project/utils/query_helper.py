@@ -105,6 +105,16 @@ def get_record_by_page_name(
         return result
 
 
+def get_record_by_page_order(
+    model: DefaultMeta, page: int, order: int
+) -> Union[list, bool]:
+    result = model.query.filter(model.order == order, model.page == page).one_or_none()
+    if not result:
+        return False
+    else:
+        return result
+
+
 def dump_recent_records(
     model: DefaultMeta, schema: any, limit: int = 5
 ) -> Union[list, bool]:

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Page Order</h1>
+    <form action="{{ url_for('page_order_handler') }}" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.page.label }}<br>
+            {{ form.page(size=32) }}<br>
+            {% for error in form.page.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.order.label }}<br>
+            {{ form.order(size=50) }}<br>
+            {% for error in form.order.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+    {% if results.message %} 
+    <div><p>{{ results.message }}</p></div>
+    {% else %}
+    {% for res in results %}
+    <div><p>{{ res }}</p></div>
+    {% endfor %}
+    {% endif %}
+{% endblock %}

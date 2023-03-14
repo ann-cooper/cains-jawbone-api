@@ -34,7 +34,7 @@ class PageInfoHandler(MethodView):
         if self.form.validate_on_submit():
             new_id = get_next_id(model=self.model)
             form_data_objs = (
-                DataToModelMapper(models=[PageRefs], form_data=self.form.data)
+                DataToModelMapper(models=[self.model], form_data=self.form.data)
                 .extract_db_fields()
                 .form_unpack()
                 .new_objs
