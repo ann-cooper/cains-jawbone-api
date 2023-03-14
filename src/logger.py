@@ -2,6 +2,7 @@
 Reference: https://docs.python-guide.org/writing/logging/
 Structured logging reference: https://github.com/madzak/python-json-logger  
 """
+import collections
 import logging
 import os
 
@@ -12,14 +13,19 @@ class CustomJsonFormatter(jsonlogger.JsonFormatter):
     def parse(self):
         return self._fmt.split(";")
 
-    def add_fields(self, log_record, record, message_dict):
+    def add_fields(
+        self,
+        log_record: collections.OrderedDict,
+        record: logging.LogRecord,
+        message_dict: dict,
+    ) -> None:
         super().add_fields(log_record, record, message_dict)
         log_record["status"] = log_record.get("levelname")
         if not log_record.get("service"):
             log_record["service"] = os.getenv("IMAGENAME", "name-not-found")
 
 
-def get_logger(name, level=logging.DEBUG):
+def get_logger(name: str, level: int = logging.DEBUG) -> logging.Logger:
     """Sets up a json logger.
 
     Parameters
@@ -45,4 +51,5 @@ def get_logger(name, level=logging.DEBUG):
     log_handler.setFormatter(formatter)
     logger.addHandler(log_handler)
     logger.propagate = True
+
     return logger
