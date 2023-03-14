@@ -44,5 +44,5 @@ def get_logger(name, level=logging.DEBUG):
     )
     log_handler.setFormatter(formatter)
     logger.addHandler(log_handler)
-    logger.propagate = False
+    logger.propagate = True
     return logger
