@@ -1,17 +1,16 @@
 import json
-import os
+from typing import Union
 
 import pytest
 
 from src import logger
 from src.project.app import create_app
+from src.project.forms import CharacterForm, DelRecordsForm, PageRefForm, RefInfoForm
 from src.project.models import PageOrder, PageRefs, People, ReferenceInfo
-from src.project.services import alembic, db
+from src.project.services import db
 from src.project.utils.load_data import load_pg_data
-from src.project.forms import CharacterForm
 
 logger = logger.get_logger(__name__)
-
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -53,16 +52,37 @@ def people_form_data():
         data = json.load(f)
     return data.get("people_form_data")
 
+
 @pytest.fixture(scope="function")
 def page_refs_form_data():
     with open("tests/demo_data.json", "r") as f:
         data = json.load(f)
     return data.get("page_info_form_data")
 
-@pytest.fixture(scope="function")
-def people_form_test_data(people_form_data):
 
-    return {k: CharacterForm(data=v) for k,v in people_form_data.items()}
+@pytest.fixture(scope="function")
+def people_form_test_data():
+    data = get_form_data("people_form_data")
+    return {k: CharacterForm(data=v) for k, v in data.items()}
+
+
+@pytest.fixture(scope="function")
+def reference_info_form_test_data():
+    data = get_form_data("reference_info_form_data")
+    return {k: RefInfoForm(data=v) for k, v in data.items()}
+
+
+@pytest.fixture(scope="function")
+def delete_form_test_data():
+    data = get_form_data("delete_form_data")
+    forms = {k: DelRecordsForm(data=v) for k, v in data.items()}
+    return forms
+
+
+def get_form_data(key: str) -> Union[list, dict]:
+    with open("tests/demo_data.json", "r") as f:
+        data = json.load(f)
+    return data.get(key)
 
 
 def load_all_test_data():

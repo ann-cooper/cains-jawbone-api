@@ -16,7 +16,28 @@
         "submit": true
       }
   },
-  "delete_form_data": {},
+  "delete_form_data": {
+    "people": {
+        "id": 2,
+        "name": "Jessica",
+        "record_type": "people"
+    },
+    "referenceinfo": {
+        "id": 3,
+        "page": 16,
+        "record_type": "referenceinfo"
+    },
+    "pagerefs": {
+        "id": 1,
+        "page": 50,
+        "record_type": "pagerefs"
+    },
+    "pageorder": {
+        "id": 6,
+        "page": 3,
+        "record_type": "pageorder"
+    }
+  },
   "reference_info_form_data": {
     "new": {
       "clue": "Test clue",

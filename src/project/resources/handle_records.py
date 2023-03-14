@@ -49,10 +49,10 @@ class RecordsCleanup(MethodView):
                 model=model, data=form_data_objs.get(model_name)
             )
             record_check = get_record_by_id(model=model, id=new_obj.id)
-
             if record_check:
                 message = f"Deleting records for {record_check.id}"
                 records_to_del.append(record_check)
+
                 if model_name == "People":
                     page_refs = get_all_records(
                         model=PageRefs, filters=[(PageRefs.name == record_check.name)]
@@ -68,6 +68,7 @@ class RecordsCleanup(MethodView):
                 message = f"Record not found for {new_obj}"
 
             flash(message=message)
+
             [db.session.delete(rec) for rec in records_to_del if records_to_del]
             db.session.commit()
             return redirect(url_for("records", model=model_name.lower()))

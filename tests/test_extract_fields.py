@@ -1,10 +1,8 @@
-import json
-
 import pytest
 
 from src.project.models import PageRefs, People
-from src.project.utils.extract_fields import DataToModelMapper
 from src.project.models.reference_info_model import _ReferenceInfo
+from src.project.utils.extract_fields import DataToModelMapper
 
 
 @pytest.fixture(scope="function")
@@ -38,13 +36,17 @@ def test_form_unpack(mapper_with_keys):
     }
     assert results.new_objs == expected
 
+
 def test_pg_data_load_exception():
     with pytest.raises(TypeError):
-        DataToModelMapper.pg_data_load(People, {'a': 2, 'b': 3})
+        DataToModelMapper.pg_data_load(People, {"a": 2, "b": 3})
+
 
 def test_extract_db_fields_exception():
     with pytest.raises(TypeError):
-        DataToModelMapper([_ReferenceInfo], {"data": "does not matter for this test"}).extract_db_fields()
+        DataToModelMapper(
+            [_ReferenceInfo], {"data": "does not matter for this test"}
+        ).extract_db_fields()
 
 
 class TestPGDataLoad:
@@ -52,4 +54,3 @@ class TestPGDataLoad:
         data = {"id": 4, "name": "Martine", "role": "Unknown"}
         result = DataToModelMapper.pg_data_load(People, data)
         assert result.name == "Martine"
-

@@ -1,20 +1,24 @@
-from tests import params 
 import pytest
-import json
 
-from src.project.models import People, PageRefs
+from src.project.models import PageRefs, People
 from src.project.utils.query_helper import get_record_by_name, get_record_by_page_name
-from src.project.services import db
+from tests import params
 
 
 class TestCharacters:
-    @pytest.mark.parametrize("id, endpoint, expected", params.characters_get_params, ids=params.characters_get_ids)
+    @pytest.mark.parametrize(
+        "id, endpoint, expected",
+        params.characters_get_params,
+        ids=params.characters_get_ids,
+    )
     def test_get_characters(self, app, client, id, endpoint, expected):
         response = client.get(endpoint)
         assert response.status_code == expected
 
-    def test_post_characters_new(self, app, clean_test_tables, client, people_form_test_data): 
-        form = people_form_test_data.get('new')
+    def test_post_characters_new(
+        self, app, clean_test_tables, client, people_form_test_data
+    ):
+        form = people_form_test_data.get("new")
         response = client.post("/characters/", data=form.data, follow_redirects=True)
 
         check = get_record_by_name(model=People, name="Test name")
@@ -22,8 +26,10 @@ class TestCharacters:
 
         assert check
 
-    def test_post_characters_update(self, app, clean_test_tables, client, people_form_test_data): 
-        form = people_form_test_data.get('update')
+    def test_post_characters_update(
+        self, app, clean_test_tables, client, people_form_test_data
+    ):
+        form = people_form_test_data.get("update")
         response = client.post("/characters/", data=form.data, follow_redirects=True)
 
         check = get_record_by_name(model=People, name="Martine")
