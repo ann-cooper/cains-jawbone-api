@@ -1,14 +1,14 @@
-from flask import flash, redirect, render_template, url_for
+from flask import flash, request
 from flask.views import MethodView
 
 from src import logger
-from src.project.forms import CharacterForm
 from src.project.models import PageRefs, People
 from src.project.schemas.people_schema import PeopleSchema
 from src.project.services import db
 from src.project.utils.extract_fields import DataToModelMapper
 from src.project.utils.query_helper import (
     dump_recent_records,
+    get_all_records,
     get_next_id,
     get_record_by_id,
     get_record_by_name,
@@ -22,37 +22,37 @@ class Characters(MethodView):
     def __init__(self):
         self.model = People
         self.schema = PeopleSchema()
-        self.form = CharacterForm()
 
-    def get(self, character_id):
-        results = {}
-        if character_id is None:
+    def get(self, character_id: int = None):
+        if character_id:
+            results = get_record_by_id(model=self.model, id=character_id)
+            return (
+                [self.schema.dump(results)]
+                if results
+                else {"results": None, "status": 200}
+            )
+        else:
             results = dump_recent_records(model=self.model, schema=self.schema)
             results = results if results else {"message": "No records", "status": 200}
-        else:
-            results = get_record_by_id(model=People, id=character_id)
-            if results:
-                results = [self.schema.dump(results)]
-            else:
-                results = {"message": "No records", "status": 200}
 
-        return render_template("character.html", form=self.form, results=results)
+            return results
 
     def post(self):
         records_to_add = []
-        if self.form.validate_on_submit():
+        data = request.get_json()
+        if data:
             new_id = get_next_id(model=People)
-            form_data_objs = (
-                DataToModelMapper(models=[PageRefs, People], form_data=self.form.data)
+            data_objs = (
+                DataToModelMapper(models=[PageRefs, People], form_data=data)
                 .extract_db_fields()
                 .form_unpack()
                 .new_objs
             )
             new_character = DataToModelMapper.pg_data_load(
-                model=People, data=form_data_objs.get("People")
+                model=People, data=data_objs.get("People")
             )
             new_page_ref = DataToModelMapper.pg_data_load(
-                model=PageRefs, data=form_data_objs.get("PageRefs")
+                model=PageRefs, data=data_objs.get("PageRefs")
             )
             # Check for existing record
             character_check = get_record_by_name(model=People, name=new_character.name)
@@ -74,9 +74,23 @@ class Characters(MethodView):
                         f"A record for page {new_page_ref.page} for character name {character_check.name} and people_id {character_check.id} already exists."
                     )
                     message = f"Updating record for {character_check.name} but not page_ref {new_page_ref.page} because a record for {character_check.name} on page {new_page_ref.page} exists."
+                    results = {
+                        "results": {
+                            "character": self.schema.dump(character_check),
+                            "page": None,
+                        },
+                        "staus": 200,
+                    }
                 else:
                     records_to_add.append(new_page_ref)
                     message = f"Updating record for {character_check.name} and page_ref {new_page_ref.page}"
+                    results = {
+                        "results": {
+                            "character": self.schema.dump(character_check),
+                            "page": new_page_ref.page,
+                        },
+                        "status": 200,
+                    }
                 flash(message=message)
 
             else:
@@ -86,15 +100,65 @@ class Characters(MethodView):
                     records_to_add.append(new_character)
                     new_page_ref.people_id = new_character.id
                     records_to_add.append(new_page_ref)
+                    results = {
+                        "results": {
+                            "character": new_character.id,
+                            "page": new_page_ref.id,
+                        },
+                        "status": 200,
+                    }
 
             db.session.add_all(records_to_add)
             db.session.commit()
-            return redirect(url_for("characters"))
+            return results
 
-        else:
-            message = (
-                f"Form validation error on field 'role': {self.form.errors.get('role')}"
+    def delete(self, character_id: int):
+        """Delete a character record.
+
+        Args:
+            character_id (int): url param
+
+        Request body:
+            {"name": "name to delete"}
+
+        Returns:
+            dict: records delected
+        """
+        records_to_del = []
+        data = request.get_json()
+        record_check = get_record_by_id(
+            model=self.model,
+            id=character_id,
+            filters=[(People.name == data.get("name"))],
+        )
+
+        if record_check:
+            message = f"Deleting records for {record_check.id}"
+            records_to_del.append(record_check)
+            page_refs = get_all_records(
+                model=PageRefs, filters=[(PageRefs.name == record_check.name)]
             )
+            if page_refs:
+                [records_to_del.append(rec) for rec in page_refs]
+                message = (
+                    message
+                    + f"Deleting records for {record_check.name} and pages {[x.page for x in page_refs]}"
+                )
+                results = {
+                    "results": {
+                        "character": record_check.id,
+                        "page": [x.page for x in page_refs],
+                    },
+                    "status": 200,
+                }
+            else:
+                message = f"Record not found for {record_check.page}"
+                results["results"]["page"] = None
+
             flash(message=message)
-            logger.info(message)
-            return redirect(url_for("characters"))
+
+            [db.session.delete(rec) for rec in records_to_del if records_to_del]
+            db.session.commit()
+        else:
+            results = {"results": None, "status": 200}
+        return results

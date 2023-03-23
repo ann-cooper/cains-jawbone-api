@@ -25,11 +25,15 @@ def get_next_id(model: DefaultMeta) -> int:
         return 1
 
 
-def get_record_by_id(model: DefaultMeta, id: int) -> Union[bool, db.Model]:
+def get_record_by_id(
+    model: DefaultMeta, id: int, filters: list = None
+) -> Union[bool, db.Model]:
     """
     Return a sqlalchemy record by id or False.
     """
-    record = model.query.filter(model.id == id).one_or_none()
+    filters = [] if not filters else filters
+    filters.append(model.id == id)
+    record = model.query.filter(*filters).one_or_none()
 
     if not record:
         return False

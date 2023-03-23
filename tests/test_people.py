@@ -15,23 +15,17 @@ class TestCharacters:
         response = client.get(endpoint)
         assert response.status_code == expected
 
-    def test_post_characters_new(
-        self, app, clean_test_tables, client, people_form_test_data
-    ):
-        form = people_form_test_data.get("new")
-        client.post("/characters/", data=form.data, follow_redirects=True)
+    def test_post_characters_new(self, app, clean_test_tables, client): 
+        response = client.post("/characters/", json={"name": "mytestname", "page": 66, "role": "Test"})
 
-        check = get_record_by_name(model=People, name="Test name")
-        check_page = get_record_by_page_name(model=PageRefs, name="Test name", page=66)
+        check = get_record_by_name(model=People, name="mytestname")
+        check_page = get_record_by_page_name(model=PageRefs, name="mytestname", page=66)
 
         assert check
         assert check_page
 
-    def test_post_characters_update(
-        self, app, clean_test_tables, client, people_form_test_data
-    ):
-        form = people_form_test_data.get("update")
-        client.post("/characters/", data=form.data, follow_redirects=True)
+    def test_post_characters_update(self, app, clean_test_tables, client): 
+        response = client.post("/characters/", json={"name": "Martine", "page": 50, "role": "Murderer"})
 
         check = get_record_by_name(model=People, name="Martine")
         check_page = get_record_by_page_name(model=PageRefs, name="Martine", page=50)
@@ -43,12 +37,5 @@ class TestCharacters:
         response = client.get("/characters/")
 
         assert response.status_code == 200
-        assert "No records" in response.text
-
-    def test_form_validation_error(self, app, client, caplog):
-        client.post(
-            "/characters/",
-            data={"name": "Test", "page": 1, "role": "buddy"},
-            follow_redirects=True,
-        )
-        assert "Form validation error" in caplog.text
+        assert response.json.get('message') == "No records"
+        

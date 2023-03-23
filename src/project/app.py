@@ -25,17 +25,11 @@ def register_endpoints(app: Flask) -> None:
     reference_info_view = ReferenceInfoHandler.as_view("reference_info_handler")
 
     app.add_url_rule("/hello/", view_func=hello_view, methods=["GET"])
+    app.add_url_rule("/characters/", view_func=character_view, methods=["GET", "POST"])
     app.add_url_rule(
-        "/characters/",
-        defaults={"character_id": None},
+        "/characters/<int:character_id>",
         view_func=character_view,
-        methods=["GET"],
-    )
-    app.add_url_rule("/characters/", view_func=character_view, methods=["POST"])
-    app.add_url_rule(
-        "/characters/search/<int:character_id>",
-        view_func=character_view,
-        methods=["GET"],
+        methods=["GET", "DELETE"],
     )
     app.add_url_rule(
         "/records-cleanup/",
