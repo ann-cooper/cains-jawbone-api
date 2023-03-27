@@ -26,16 +26,13 @@ class Characters(MethodView):
     def get(self, character_id: int = None):
         if character_id:
             results = get_record_by_id(model=self.model, id=character_id)
-            return (
-                [self.schema.dump(results)]
-                if results
-                else {"results": None, "status": 200}
-            )
+            results = self.schema.dump(results) if results else None
         else:
             results = dump_recent_records(model=self.model, schema=self.schema)
-            results = results if results else {"message": "No records", "status": 200}
+        
+        results = results if results else {"message": "No records"}
 
-            return results
+        return {"results": results, "status": 200}
 
     def post(self):
         records_to_add = []
@@ -43,9 +40,9 @@ class Characters(MethodView):
         if data:
             new_id = get_next_id(model=People)
             data_objs = (
-                DataToModelMapper(models=[PageRefs, People], form_data=data)
+                DataToModelMapper(models=[PageRefs, People], data=data)
                 .extract_db_fields()
-                .form_unpack()
+                .data_unpack()
                 .new_objs
             )
             new_character = DataToModelMapper.pg_data_load(

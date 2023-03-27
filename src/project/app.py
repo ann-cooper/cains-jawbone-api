@@ -8,7 +8,6 @@ from src.project.resources import (
     Hello,
     PageInfoHandler,
     PageOrderHandler,
-    RecordsCleanup,
     ReferenceInfoHandler,
 )
 from src.project.services import alembic, db, migrate, mllw
@@ -19,7 +18,6 @@ logger = logger.get_logger(__name__)
 def register_endpoints(app: Flask) -> None:
     hello_view = Hello.as_view("hello")
     character_view = Characters.as_view("characters")
-    records_view = RecordsCleanup.as_view("records")
     page_info_view = PageInfoHandler.as_view("page_info_handler")
     page_order_view = PageOrderHandler.as_view("page_order_handler")
     reference_info_view = ReferenceInfoHandler.as_view("reference_info_handler")
@@ -31,21 +29,15 @@ def register_endpoints(app: Flask) -> None:
         view_func=character_view,
         methods=["GET", "DELETE"],
     )
-    app.add_url_rule(
-        "/records-cleanup/",
-        defaults={"model": "people"},
-        view_func=records_view,
-        methods=["GET", "POST"],
-    )
-    app.add_url_rule(
-        "/records-cleanup/<string:model>",
-        view_func=records_view,
-        methods=["GET", "POST"],
-    )
     app.add_url_rule("/page-info/", view_func=page_info_view, methods=["GET", "POST"])
+    app.add_url_rule("/page-info/<int:page_id>", view_func=page_info_view, methods=["GET", "DELETE"])
     app.add_url_rule("/page-order/", view_func=page_order_view, methods=["GET", "POST"])
+    app.add_url_rule("/page-order/<int:order_id>", view_func=page_order_view, methods=["GET", "DELETE"])
     app.add_url_rule(
         "/reference-info/", view_func=reference_info_view, methods=["GET", "POST"]
+    )
+    app.add_url_rule(
+        "/reference-info/<int:ref_id>", view_func=reference_info_view, methods=["GET", "DELETE"]
     )
 
 
