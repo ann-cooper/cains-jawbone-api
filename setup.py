@@ -12,6 +12,6 @@ setup(
     description="An API to handle research about the Cain's Jawbone puzzle",
     author="Ann",
     packages=find_packages(),
-    python_requires=">=3.9",
+    python_requires=">=3.10",
     install_requires=out_reqs,
 )

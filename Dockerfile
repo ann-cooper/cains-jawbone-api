@@ -1,6 +1,6 @@
 ARG DB_PATH
 
-FROM python:3.9-slim-buster
+FROM python:3.10-slim-buster
 
 ARG DB_PATH
 ENV DB_PATH=${DB_PATH}
