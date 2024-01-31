@@ -7,7 +7,7 @@ class People(db.Model):
     __tablename__ = "people"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String, nullable=True) # TODO must be unique
+    name = db.Column(db.String, nullable=True)  # TODO must be unique
     role = db.Column(db.String, nullable=True)
 
 

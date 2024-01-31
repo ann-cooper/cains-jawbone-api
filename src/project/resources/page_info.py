@@ -1,4 +1,4 @@
-from flask import flash, request
+from flask import request
 from flask.views import MethodView
 
 from src import logger
@@ -9,9 +9,9 @@ from src.project.utils.extract_fields import DataToModelMapper
 from src.project.utils.query_helper import (
     dump_recent_records,
     get_next_id,
+    get_record_by_id,
     get_record_by_name,
     get_record_by_page_name,
-    get_record_by_id
 )
 
 logger = logger.get_logger(__name__)
@@ -33,7 +33,7 @@ class PageInfoHandler(MethodView):
 
         return {"results": results, "status": 200}
 
-    def post(self) -> dict:
+    def post(self, page_id: int = None) -> dict:
         """Add or update a page-info record
 
         Request body:
@@ -47,10 +47,9 @@ class PageInfoHandler(MethodView):
         if data:
             new_id = get_next_id(model=self.model)
             data_objs = (
-                DataToModelMapper(models=[self.model], data=data)
+                DataToModelMapper(models=[self.model])
                 .extract_db_fields()
-                .data_unpack()
-                .new_objs
+                .data_unpack(data=data)
             )
             new_page_ref = DataToModelMapper.pg_data_load(
                 model=self.model, data=data_objs.get("PageRefs")
@@ -71,8 +70,14 @@ class PageInfoHandler(MethodView):
                     model=People, name=new_page_ref.name
                 )
                 message = f"New record created for {new_page_ref.page}"
-                results = {"results": {"people": character_check.id, "page_info": new_page_ref.id}}
-                if not character_check:
+                if character_check:
+                    results = {
+                        "results": {
+                            "people": character_check.id,
+                            "page_info": new_page_ref.id,
+                        }
+                    }
+                else:  # character_check False
                     # Create new character record
                     new_character_id = get_next_id(model=People)
                     new_character = People(name=new_page_ref.name, id=new_character_id)
@@ -81,12 +86,21 @@ class PageInfoHandler(MethodView):
                         message
                         + f" and new character record created for {new_character.name}."
                     )
-                    results = {"results": {"people": new_character_id, "page_info": new_page_ref.id}}
-            flash(message=message)
+                    results = {
+                        "results": {
+                            "people": new_character_id,
+                            "page_info": new_page_ref.id,
+                        }
+                    }
+            logger.info(message)
             db.session.add_all(records_to_add)
             db.session.commit()
             results["status"] = 200
             return results
+
+    def put(self, page_id: int):
+        # TODO edit button calls
+        pass
 
     def delete(self, page_id: int) -> dict:
         """Delete page-info record.
@@ -94,28 +108,23 @@ class PageInfoHandler(MethodView):
         Args:
             page_id (int): id of page info record to delete
 
-        Request body:
-            {"page": 1}
-            Page number required.
-
         Returns:
             dict: record id deleted
         """
         records_to_del = []
-        data = request.get_json()
-        record_check = get_record_by_id(model=self.model, id=page_id, filters=[(PageRefs.page == data.get('page'))])
+        record_check = get_record_by_id(model=self.model, id=page_id)
 
         if record_check:
-            message = f"Deleting page info record id: {page_id} for page {data.get('page')}"
+            message = f"Deleting page info record id: {page_id}"
             records_to_del.append(record_check)
             results = {"results": record_check.id}
         else:
-            message = f"No record found for id {page_id} and page {data.get('page')}"
+            message = f"No record found for id {page_id}."
             results = {"results": None}
 
-        flash(message=message)
+        logger.info(message)
         [db.session.delete(rec) for rec in records_to_del if records_to_del]
         db.session.commit()
-        results['status'] = 200
+        results["status"] = 200
 
         return results

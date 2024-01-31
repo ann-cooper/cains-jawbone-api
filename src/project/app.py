@@ -5,10 +5,12 @@ from src import logger
 from src.project.config.app_config import CONFIGURATIONS
 from src.project.resources import (
     Characters,
+    Fields,
     Hello,
     PageInfoHandler,
     PageOrderHandler,
     ReferenceInfoHandler,
+    Search,
 )
 from src.project.services import alembic, db, migrate, mllw
 
@@ -21,24 +23,41 @@ def register_endpoints(app: Flask) -> None:
     page_info_view = PageInfoHandler.as_view("page_info_handler")
     page_order_view = PageOrderHandler.as_view("page_order_handler")
     reference_info_view = ReferenceInfoHandler.as_view("reference_info_handler")
+    fields_view = Fields.as_view("fields")
+    search_view = Search.as_view("search")
 
     app.add_url_rule("/hello/", view_func=hello_view, methods=["GET"])
     app.add_url_rule("/characters/", view_func=character_view, methods=["GET", "POST"])
     app.add_url_rule(
         "/characters/<int:character_id>",
         view_func=character_view,
-        methods=["GET", "DELETE"],
+        methods=["GET", "POST", "DELETE"],
     )
     app.add_url_rule("/page-info/", view_func=page_info_view, methods=["GET", "POST"])
-    app.add_url_rule("/page-info/<int:page_id>", view_func=page_info_view, methods=["GET", "DELETE"])
+    app.add_url_rule(
+        "/page-info/<int:page_id>",
+        view_func=page_info_view,
+        methods=["GET", "POST", "DELETE"],
+    )
     app.add_url_rule("/page-order/", view_func=page_order_view, methods=["GET", "POST"])
-    app.add_url_rule("/page-order/<int:order_id>", view_func=page_order_view, methods=["GET", "DELETE"])
+    app.add_url_rule(
+        "/page-order/<int:order_id>",
+        view_func=page_order_view,
+        methods=["GET", "POST", "DELETE"],
+    )
     app.add_url_rule(
         "/reference-info/", view_func=reference_info_view, methods=["GET", "POST"]
     )
     app.add_url_rule(
-        "/reference-info/<int:ref_id>", view_func=reference_info_view, methods=["GET", "DELETE"]
+        "/reference-info/<int:ref_id>",
+        view_func=reference_info_view,
+        methods=["GET", "POST", "DELETE"],
     )
+
+    app.add_url_rule(
+        "/fields/<model_selection>", view_func=fields_view, methods=["GET"]
+    )
+    app.add_url_rule("/search/", view_func=search_view, methods=["GET", "POST"])
 
 
 def register_services(app: Flask, services: list) -> None:
