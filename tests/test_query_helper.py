@@ -60,7 +60,7 @@ class TestQueryHelpers:
         assert [16, 71] == page_numbers
 
     def test_find_model(self, app):
-        result = find_model(key="pageorder")
+        model, schema = find_model(key="Page order")
 
-        assert result.get("model") == PageOrder
-        assert result.get("schema") == PageOrderSchema
+        assert model == PageOrder
+        assert schema == PageOrderSchema

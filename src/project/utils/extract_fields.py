@@ -8,17 +8,27 @@ logger = logger.get_logger(__name__)
 
 
 class DataToModelMapper:
-    def __init__(self, models: list, form_data: dict):
+    """Extract form or request data.
+
+    Attributes:
+        models: list
+        keys_dict: dict
+
+    Methods:
+        extract_db_fields()
+            Get fields from a Sqlalchemy model.
+        data_unpack(data: dict)
+            Gets values from form for keys that exist in the model fields.
+        pg_data_load(model: DefaultMeta, data: dict) -> db.Model
+            Loads extracted data to a model.
+    """
+
+    def __init__(self, models: list):
         self.models = models
-        self.form_data = form_data
         self.keys_dict = None
-        self.new_objs = None
 
-    def extract_db_fields(self):
-        """Get fields from a Sqlalchemy model.
-
-        Args:
-            model (db.Model): A sqlalchemy model
+    def extract_db_fields(self) -> list:
+        """Get fields from Sqlalchemy models.
 
         Returns:
             dict: a dict of the model fields with model class name as key and fields as values
@@ -34,20 +44,19 @@ class DataToModelMapper:
         else:
             return self
 
-    def form_unpack(self):
+    def data_unpack(self, data: dict) -> dict:
         """Gets values from form for keys that exist in the model fields.
 
         Returns:
-            DataModelMapper: self
+            new_objs: dict
         """
-        self.new_objs = {}
+        new_objs = {}
         for model in self.models:
             model_name = model().__class__.__name__
-            form_data_obj = {
-                key: self.form_data.get(key) for key in self.keys_dict.get(model_name)
-            }
-            self.new_objs[model_name] = form_data_obj
-        return self
+            data_obj = {key: data.get(key) for key in self.keys_dict.get(model_name)}
+            new_objs[model_name] = data_obj
+
+        return new_objs
 
     @staticmethod
     def pg_data_load(model: DefaultMeta, data: dict) -> db.Model:

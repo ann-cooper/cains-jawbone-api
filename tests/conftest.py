@@ -60,31 +60,6 @@ def page_refs_form_data():
     return data.get("page_info_form_data")
 
 
-@pytest.fixture(scope="function")
-def people_form_test_data():
-    data = get_form_data("people_form_data")
-    return {k: CharacterForm(data=v) for k, v in data.items()}
-
-
-@pytest.fixture(scope="function")
-def reference_info_form_test_data():
-    data = get_form_data("reference_info_form_data")
-    return {k: RefInfoForm(data=v) for k, v in data.items()}
-
-
-@pytest.fixture(scope="function")
-def delete_form_test_data():
-    data = get_form_data("delete_form_data")
-    forms = {k: DelRecordsForm(data=v) for k, v in data.items()}
-    return forms
-
-
-def get_form_data(key: str) -> Union[list, dict]:
-    with open("tests/demo_data.json", "r") as f:
-        data = json.load(f)
-    return data.get(key)
-
-
 def load_all_test_data():
     """Create a testing app context to load test data."""
 

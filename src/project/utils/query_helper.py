@@ -25,11 +25,15 @@ def get_next_id(model: DefaultMeta) -> int:
         return 1
 
 
-def get_record_by_id(model: DefaultMeta, id: int) -> Union[bool, db.Model]:
+def get_record_by_id(
+    model: DefaultMeta, id: int, filters: list = None
+) -> Union[bool, db.Model]:
     """
     Return a sqlalchemy record by id or False.
     """
-    record = model.query.filter(model.id == id).one_or_none()
+    filters = [] if not filters else filters
+    filters.append(model.id == id)
+    record = model.query.filter(*filters).one_or_none()
 
     if not record:
         return False
@@ -89,7 +93,7 @@ def get_all_records(model: DefaultMeta, filters: list = None) -> Union[list, boo
 def search_records(model: DefaultMeta, filters: list) -> Union[list, bool]:
     records = model.query.filter(*filters).all()
 
-    if records is None:
+    if len(records) == 0:
         return False
     else:
         return records
@@ -98,6 +102,8 @@ def search_records(model: DefaultMeta, filters: list) -> Union[list, bool]:
 def get_record_by_page_name(
     model: DefaultMeta, page: int, name: str
 ) -> Union[list, bool]:
+    if not page or not name:
+        return False
     result = model.query.filter(model.name == name, model.page == page).one_or_none()
     if not result:
         return False
@@ -132,9 +138,11 @@ def find_model(key: str) -> dict:
         key (str): key from the request.form
     """
     model_map = {
-        "people": {"model": People, "schema": PeopleSchema},
-        "pagerefs": {"model": PageRefs, "schema": PageRefSchema},
-        "pageorder": {"model": PageOrder, "schema": PageOrderSchema},
-        "referenceinfo": {"model": ReferenceInfo, "schema": RefInfoSchema},
+        "Character": {"model": People, "schema": PeopleSchema},
+        "Page": {"model": PageRefs, "schema": PageRefSchema},
+        "Page order": {"model": PageOrder, "schema": PageOrderSchema},
+        "Clue": {"model": ReferenceInfo, "schema": RefInfoSchema},
     }
-    return model_map.get(key)
+    model_map = model_map.get(key)
+    if model_map:
+        return model_map.get("model"), model_map.get("schema")

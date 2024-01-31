@@ -2,6 +2,7 @@
 Reference: https://docs.python-guide.org/writing/logging/
 Structured logging reference: https://github.com/madzak/python-json-logger  
 """
+
 import collections
 import logging
 import os
