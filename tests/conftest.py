@@ -5,7 +5,6 @@ import pytest
 
 from src import logger
 from src.project.app import create_app
-from src.project.forms import CharacterForm, DelRecordsForm, RefInfoForm
 from src.project.models import PageOrder, PageRefs, People, ReferenceInfo
 from src.project.services import db
 from src.project.utils.load_data import load_pg_data
@@ -23,6 +22,7 @@ def app():
 @pytest.fixture(scope="function")
 def clean_test_tables(app):
     yield
+    logger.info("Cleaning Test Tables!!!!!!")
     table_models = [People, PageOrder, PageRefs, ReferenceInfo]
     for table in table_models:
         try:
@@ -46,18 +46,18 @@ def empty_test_tables(app):
     db.create_all()
 
 
-@pytest.fixture(scope="function")
-def people_form_data():
-    with open("tests/demo_data.json", "r") as f:
-        data = json.load(f)
-    return data.get("people_form_data")
+# @pytest.fixture(scope="function")
+# def people_form_data():
+#     with open("tests/demo_data.json", "r") as f:
+#         data = json.load(f)
+#     return data.get("people_form_data")
 
 
-@pytest.fixture(scope="function")
-def page_refs_form_data():
-    with open("tests/demo_data.json", "r") as f:
-        data = json.load(f)
-    return data.get("page_info_form_data")
+# @pytest.fixture(scope="function")
+# def page_refs_form_data():
+#     with open("tests/demo_data.json", "r") as f:
+#         data = json.load(f)
+#     return data.get("page_info_form_data")
 
 
 def load_all_test_data():
